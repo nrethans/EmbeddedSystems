@@ -1,0 +1,44 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --board "/ti/boards/MSP_EXP432E401Y" --device "MSP432E" --part "MSP432E401YTPDT" --package "128 Pin QFP|32x32" --product "simplelink_msp432e4_sdk@4.20.00.12"
+ * @v2CliArgs --device "MSP432E401Y" --package "TQFP (PDT)" --board "/ti/boards/MSP_EXP432E401Y" --product "simplelink_msp432e4_sdk@4.20.00.12"
+ * @versions {"tool":"1.21.0+3721"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const GPIO  = scripting.addModule("/ti/drivers/GPIO");
+const GPIO1 = GPIO.addInstance();
+const RTOS  = scripting.addModule("/ti/drivers/RTOS");
+const UART  = scripting.addModule("/ti/drivers/UART");
+const UART1 = UART.addInstance();
+const UART2 = UART.addInstance();
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+GPIO1.$hardware = system.deviceData.board.components.D1;
+GPIO1.$name     = "CONFIG_GPIO_LED_0";
+
+
+UART1.$name             = "CONFIG_UART_0";
+UART1.$hardware         = system.deviceData.board.components.XDS110UART;
+UART1.interruptPriority = "4";
+
+UART2.$name = "CONFIG_UART_1";
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+GPIO1.gpioPin.$suggestSolution        = "expansion.87";
+RTOS.timer0.resource.$suggestSolution = "Timer0";
+UART1.uart.$suggestSolution           = "UART0";
+UART1.uart.txPin.$suggestSolution     = "expansion.76";
+UART1.uart.rxPin.$suggestSolution     = "expansion.74";
+UART2.uart.$suggestSolution           = "UART4";
+UART2.uart.txPin.$suggestSolution     = "expansion.8";
+UART2.uart.rxPin.$suggestSolution     = "expansion.6";
