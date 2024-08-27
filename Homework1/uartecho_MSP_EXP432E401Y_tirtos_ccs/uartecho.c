@@ -77,11 +77,10 @@ void MsgParser(UART_Handle uart, char *Msg){
 void *mainThread(void *arg0)
 {
     char        input;
-    char MsgBuff[100];
+    char MsgBuff[100]={0};
     int index = 0;
     int iterate;
-    const char  echoPrompt[] = "Echoing characters:\r\n";
-    const char  MsgBuffOverflowErr[] = "\nMessage buffer overflow error: Do no exceed 100 Characters\n";
+    const char  MsgBuffOverflowErr[] = "\r\nMessage buffer overflow error: Do no exceed 100 Characters\r\n";
     UART_Handle uart;
     UART_Params uartParams;
 
@@ -109,7 +108,6 @@ void *mainThread(void *arg0)
         while (1);
     }
 
-    UART_write(uart, echoPrompt, sizeof(echoPrompt));
     /* Loop forever echoing */
     while (1) {
         UART_read(uart, &input, 1);
@@ -117,22 +115,31 @@ void *mainThread(void *arg0)
             if(input == '\r'||input == '\n'){
                 MsgBuff[index++]='\0';
                 MsgParser(uart,MsgBuff);
-                for(iterate = 0; iterate < index; iterate++)
-                    MsgBuff[iterate]='\xbe';
+                for(iterate = 0; iterate < index; iterate++){
+                    MsgBuff[iterate]='0';
+                }
                 index = 0;
             }
-            else if(input == 127)
-                MsgBuff[--index]='\xbe';
-            else
-                MsgBuff[index++]=input;
+            else if(input == 127 || input == '\b'){
+                if(index!=0){
+                    index--;
+                }
+            }
+            else{
+                if(input != 24 && input != 25 && input != 26 && input != 27)
+                    MsgBuff[index++]=input;
+            }
         }
         else{
-            for(iterate = 0; iterate < 100; iterate++)
-                MsgBuff[iterate]='\xbe';
+            for(iterate = 0; iterate < 100; iterate++){
+                MsgBuff[iterate]='0';
+            }
             index = 0;
             UART_write(uart, MsgBuffOverflowErr, sizeof(MsgBuffOverflowErr));
         }
-        UART_write(uart, &input, 1);
+        if(input != 24 && input != 25 && input != 26 && input != 27){
+            UART_write(uart, &input, 1);
+        }
     }
 }
 
