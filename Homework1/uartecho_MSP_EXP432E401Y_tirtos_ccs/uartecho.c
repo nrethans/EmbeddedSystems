@@ -33,6 +33,7 @@
 /*
  *  ======== uartecho.c ========
  */
+#include <stdio.h>
 #include <string.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -44,23 +45,31 @@
 /* Driver configuration */
 #include "ti_drivers_config.h"
 
+
 /*
  * ======== Functions ==========
  */
 
 /* Message Parser Function */
-void MsgParser(){
-    char Parser[] = "\nParser Activated\r\n";
-    UART_write(uart,Parser,sizeof(Parser));
+void MsgParser(UART_Handle uart, char *Msg){
+    //Messages
+    char Help[]  = "\n\r\n========================\r\n -help -> provides list of functions\r\n -about -> provides developer and version info\r\n========================\r\n";
+    char About[] = "\n\r\n========================\r\n"
+                       " Developer: Nicholas Rethans\r\n"
+                       " Assignment #: 1\r\n"
+                       " Version 1.0 \r\n"
+                       " Time: " __TIME__ "  Date: " __DATE__ "\r\n"
+                       "========================\r\n";
+    char InvalidCMD[] = "\nInvalid Command...\r\n";
+
+    //Message Parsing
+    if(strcasecmp(Msg,"-help")==0)
+        UART_write(uart,Help,sizeof(Help));
+    else if(strcasecmp(Msg,"-about")==0)
+        UART_write(uart,About,sizeof(About));
+    else
+        UART_write(uart,InvalidCMD,sizeof(InvalidCMD));
 }
-
-/*
- * ======== Global Structure ===
- */
-
-struct Glob{
-
-};
 
 /*
  *  ======== mainThread ========
@@ -72,7 +81,7 @@ void *mainThread(void *arg0)
     int index = 0;
     int iterate;
     const char  echoPrompt[] = "Echoing characters:\r\n";
-    const char  ParserMsg[]  = "\nParsing...\r\n";
+    const char  MsgBuffOverflowErr[] = "\nMessage buffer overflow error: Do no exceed 100 Characters\n";
     UART_Handle uart;
     UART_Params uartParams;
 
@@ -106,9 +115,9 @@ void *mainThread(void *arg0)
         UART_read(uart, &input, 1);
         if(index < sizeof(MsgBuff)-1){
             if(input == '\r'||input == '\n'){
-                UART_write(uart, ParserMsg, sizeof(ParserMsg));
-                MsgParser();
-                for(iterate = 0; iterate < index; iterate++) //Not sure if necessary - clearing buffer
+                MsgBuff[index++]='\0';
+                MsgParser(uart,MsgBuff);
+                for(iterate = 0; iterate < index; iterate++)
                     MsgBuff[iterate]='\xbe';
                 index = 0;
             }
@@ -117,7 +126,12 @@ void *mainThread(void *arg0)
             else
                 MsgBuff[index++]=input;
         }
-        //else Clear Buffer and give error message
+        else{
+            for(iterate = 0; iterate < 100; iterate++)
+                MsgBuff[iterate]='\xbe';
+            index = 0;
+            UART_write(uart, MsgBuffOverflowErr, sizeof(MsgBuffOverflowErr));
+        }
         UART_write(uart, &input, 1);
     }
 }
