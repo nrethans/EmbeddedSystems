@@ -35,6 +35,10 @@
  * - Move terminal UART input interpreter into TerminalFunctions
  * - Create none case sensitive string comparison and nested function parsing
  * - Implement Glob struct and constructor
+ * - Implement faster parser with switch and string hashing function
+ * - change invalid message to Message ___ not understood
+ * - make one header file with function declarations and define magic numbers but create the functions body in a seperate c file which includes the one header
+ *
  */
 
 /*
