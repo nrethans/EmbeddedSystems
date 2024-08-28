@@ -31,6 +31,13 @@
  */
 
 /*
+ * TO-DO
+ * - Move terminal UART input interpreter into TerminalFunctions
+ * - Create none case sensitive string comparison and nested function parsing
+ * - Implement Glob struct and constructor
+ */
+
+/*
  *  ======== uartecho.c ========
  */
 
