@@ -1,3 +1,5 @@
+"./CommandTerminal.obj"
+"./Infrastructure.obj"
 "./main_tirtos.obj"
 "./uartecho.obj"
 "./syscfg/ti_drivers_config.obj"

@@ -46,7 +46,7 @@
  */
 
 #include <Global.h>
-#include <TerminalFunctions.h>
+
 /*
  *  ======== mainThread ===========
  */

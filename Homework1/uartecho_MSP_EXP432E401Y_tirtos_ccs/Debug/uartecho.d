@@ -23,7 +23,6 @@ uartecho.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h
 uartecho.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h
 uartecho.obj: syscfg/ti_drivers_config.h
 uartecho.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
-uartecho.obj: C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework1/uartecho_MSP_EXP432E401Y_tirtos_ccs/TerminalFunctions.h
 
 ../uartecho.c:
 
@@ -70,6 +69,4 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h:
 syscfg/ti_drivers_config.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h:
-
-C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework1/uartecho_MSP_EXP432E401Y_tirtos_ccs/TerminalFunctions.h:
 

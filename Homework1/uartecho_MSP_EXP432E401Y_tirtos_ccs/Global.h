@@ -37,11 +37,20 @@ typedef struct Glob {
  * ========== Global Initializer =======
  */
 
-void GlobInit(Glob *global, UART_Handle uart) {
-    global->GlobHead = 0x5a5a5a5a;
-    global->uart = uart;
-    global->GlobTail = 0x5a5a5a5a;
-}
+void GlobInit(Glob *global, UART_Handle uart);
+
+/*
+ * ========== Parser Functions =========
+ */
+void HelpMsg(UART_Handle uart);
+
+void AboutMsg(UART_Handle uart);
+
+void ClearMsg(UART_Handle uart);
+
+void InvalidMsg(UART_Handle uart);
+
+void MsgParser(UART_Handle uart, char *Msg);
 
 #endif
 

@@ -11,9 +11,20 @@ main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/
 main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/machine/_types.h
 main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/machine/_stdint.h
 main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/sys/_stdint.h
+main_tirtos.obj: C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework1/uartecho_MSP_EXP432E401Y_tirtos_ccs/Global.h
+main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdio.h
+main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdarg.h
+main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/string.h
+main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/xlocale/_string.h
+main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stddef.h
+main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/ctype.h
+main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/_isfuncdcl.h
+main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h
+main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h
+main_tirtos.obj: syscfg/ti_drivers_config.h
+main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/pthread.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sys/types.h
-main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stddef.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sys/_internal.h
 main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/time.h
 main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/abi_prefix.h
@@ -26,7 +37,6 @@ main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sched.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h
 main_tirtos.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/std.h
-main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdarg.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/targets/arm/elf/std.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/targets/arm/elf/M4F.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/targets/std.h
@@ -105,11 +115,33 @@ C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/machine/_stdint.h
 
 C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/sys/_stdint.h:
 
+C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework1/uartecho_MSP_EXP432E401Y_tirtos_ccs/Global.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdio.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdarg.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/string.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/xlocale/_string.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stddef.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/ctype.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/_isfuncdcl.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h:
+
+syscfg/ti_drivers_config.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h:
+
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/pthread.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sys/types.h:
-
-C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stddef.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sys/_internal.h:
 
@@ -134,8 +166,6 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sched.h:
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h:
 
 C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/std.h:
-
-C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdarg.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/targets/arm/elf/std.h:
 

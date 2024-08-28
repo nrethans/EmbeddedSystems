@@ -10,6 +10,8 @@ GEN_OPTS__FLAG := --cmd_file="C:/Users/NickRethans/Desktop/EmbeddedSystems/Homew
 GEN_CMDS__FLAG := -l"C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework1/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd" 
 
 ORDERED_OBJS += \
+"./CommandTerminal.obj" \
+"./Infrastructure.obj" \
 "./main_tirtos.obj" \
 "./uartecho.obj" \
 "./syscfg/ti_drivers_config.obj" \
@@ -153,8 +155,8 @@ uartecho_MSP_EXP432E401Y_tirtos_ccs.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/User
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main_tirtos.obj" "uartecho.obj" "syscfg\ti_drivers_config.obj" 
-	-$(RM) "main_tirtos.d" "uartecho.d" "syscfg\ti_drivers_config.d" 
+	-$(RM) "CommandTerminal.obj" "Infrastructure.obj" "main_tirtos.obj" "uartecho.obj" "syscfg\ti_drivers_config.obj" 
+	-$(RM) "CommandTerminal.d" "Infrastructure.d" "main_tirtos.d" "uartecho.d" "syscfg\ti_drivers_config.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
 	-@echo 'Finished clean'
 	-@echo ' '

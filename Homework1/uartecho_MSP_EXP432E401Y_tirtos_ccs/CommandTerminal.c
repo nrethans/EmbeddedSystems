@@ -1,13 +1,4 @@
-/*
- * TerminalFunctions.h
- *
- *  Created on: Aug 27, 2024
- *      Author: NickRethans
- */
-
-#ifndef TERMINALFUNCTIONS
-#define TERMINALFUNCTIONS
-
+#include "Global.h"
 /* Message Parser & Message Functions */
 
 void HelpMsg(UART_Handle uart) {
@@ -73,5 +64,3 @@ void MsgParser(UART_Handle uart, char *Msg) {
         InvalidMsg(uart);
     }
 }
-
-#endif /* TERMINALFUNCTIONS */
