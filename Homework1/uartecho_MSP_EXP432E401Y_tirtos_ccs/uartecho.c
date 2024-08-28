@@ -33,51 +33,16 @@
 /*
  *  ======== uartecho.c ========
  */
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <stddef.h>
 
-/* Driver Header files */
-#include <ti/drivers/GPIO.h>
-#include <ti/drivers/UART.h>
-
-/* Driver configuration */
-#include "ti_drivers_config.h"
-
-
+#include <Global.h>
+#include <TerminalFunctions.h>
 /*
- * ======== Functions ==========
- */
-
-/* Message Parser Function */
-void MsgParser(UART_Handle uart, char *Msg){
-    //Messages
-    char Help[]  = "\n\r\n========================\r\n -help -> provides list of functions\r\n -about -> provides developer and version info\r\n========================\r\n";
-    char About[] = "\n\r\n========================\r\n"
-                       " Developer: Nicholas Rethans\r\n"
-                       " Assignment #: 1\r\n"
-                       " Version 1.0 \r\n"
-                       " Time: " __TIME__ "  Date: " __DATE__ "\r\n"
-                       "========================\r\n";
-    char InvalidCMD[] = "\nInvalid Command...\r\n";
-
-    //Message Parsing
-    if(strcasecmp(Msg,"-help")==0)
-        UART_write(uart,Help,sizeof(Help));
-    else if(strcasecmp(Msg,"-about")==0)
-        UART_write(uart,About,sizeof(About));
-    else
-        UART_write(uart,InvalidCMD,sizeof(InvalidCMD));
-}
-
-/*
- *  ======== mainThread ========
+ *  ======== mainThread ===========
  */
 void *mainThread(void *arg0)
 {
     char        input;
-    char MsgBuff[100]={0};
+    char MsgBuff[MsgBufferSize]={0};
     int index = 0;
     int iterate;
     const char  MsgBuffOverflowErr[] = "\r\nMessage buffer overflow error: Do no exceed 100 Characters\r\n";
@@ -131,7 +96,7 @@ void *mainThread(void *arg0)
             }
         }
         else{
-            for(iterate = 0; iterate < 100; iterate++){
+            for(iterate = 0; iterate < MsgBufferSize; iterate++){
                 MsgBuff[iterate]='0';
             }
             index = 0;
