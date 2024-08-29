@@ -53,10 +53,10 @@
 void *mainThread(void *arg0)
 {
     char        input;
-    char MsgBuff[MsgBufferSize]={0};
+    char MsgBuff[MsgBufferSize]={'\0'};
     int index = 0;
     int iterate;
-    const char  MsgBuffOverflowErr[] = "\r\nMessage buffer overflow error: Do no exceed 100 Characters\r\n";
+    char  MsgBuffOverflowErr[] = "\r\nMessage buffer overflow error: Do no exceed 100 Characters\r\n";
     UART_Handle uart;
     UART_Params uartParams;
 
@@ -92,7 +92,7 @@ void *mainThread(void *arg0)
                 MsgBuff[index++]='\0';
                 MsgParser(uart,MsgBuff);
                 for(iterate = 0; iterate < index; iterate++){
-                    MsgBuff[iterate]='0';
+                    MsgBuff[iterate]='\0';
                 }
                 index = 0;
             }
@@ -108,10 +108,10 @@ void *mainThread(void *arg0)
         }
         else{
             for(iterate = 0; iterate < MsgBufferSize; iterate++){
-                MsgBuff[iterate]='0';
+                MsgBuff[iterate]='\0';
             }
             index = 0;
-            UART_write(uart, MsgBuffOverflowErr, sizeof(MsgBuffOverflowErr));
+            UART_Write_Protected(uart, MsgBuffOverflowErr);
         }
         if(input != 24 && input != 25 && input != 26 && input != 27){
             UART_write(uart, &input, 1);

@@ -13,6 +13,13 @@
 /*
  * ========== Global Initializer =======
  */
+
 void GlobInit(Glob *global, UART_Handle uart);
+
+/*
+ * ========== UART_Write_Protected =====
+ */
+
+void UART_Write_Protected(UART_Handle uart, char* input);
 
 #endif /* INFRASTRUCTURE_H */

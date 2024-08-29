@@ -1,9 +1,10 @@
 /*
- * Global.h
+ *    Global.h
  *
  *  Created on: Aug 27, 2024
  *      Author: NickRethans
  */
+
 #ifndef Global
 #define Global
 
@@ -20,8 +21,10 @@
  * ========== Global Definitions =======
  */
 
-#define Version "1.0"
+#define Version "1"
+#define SubVersion "2"
 #define MsgBufferSize 100
+#define MsgPrintBufferSize 80
 
 /*
  * ========== Global Variables =========
@@ -42,6 +45,7 @@ void GlobInit(Glob *global, UART_Handle uart);
 /*
  * ========== Parser Functions =========
  */
+
 void HelpMsg(UART_Handle uart);
 
 void AboutMsg(UART_Handle uart);
@@ -50,7 +54,13 @@ void ClearMsg(UART_Handle uart);
 
 void InvalidMsg(UART_Handle uart);
 
-void MsgParser(UART_Handle uart, char *Msg);
+void MsgParser(UART_Handle uart, char *msg);
+
+/*
+ * ========== UART_Write_Protected =====
+ */
+
+void UART_Write_Protected(UART_Handle uart, char* input);
 
 #endif
 
