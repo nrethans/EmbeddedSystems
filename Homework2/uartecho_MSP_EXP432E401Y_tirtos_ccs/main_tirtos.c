@@ -57,6 +57,8 @@ void __attribute__((weak)) NDK_hookInit(int32_t id) {}
 /*
  *  ======== main ========
  */
+Glob global;
+
 int main(void)
 {
     pthread_t           thread;

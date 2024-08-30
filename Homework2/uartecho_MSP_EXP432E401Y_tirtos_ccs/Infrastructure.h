@@ -14,7 +14,7 @@
  * ========== Global Initializer =======
  */
 
-void GlobInit(Glob *global, UART_Handle uart);
+void GlobInit(Glob *global);
 
 /*
  * ========== UART_Write_Protected =====

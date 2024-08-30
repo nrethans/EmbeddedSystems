@@ -43,7 +43,9 @@ typedef struct Glob {
  * ========== Global Initializer =======
  */
 
-void GlobInit(Glob *global, UART_Handle uart);
+void GlobInit(Glob *global);
+
+extern Glob global;
 
 /*
  * ========== Parser Functions =========

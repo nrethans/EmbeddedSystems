@@ -32,7 +32,6 @@
 
 /*
  * TO-DO
- * - Move terminal UART input interpreter into TerminalFunctions
  * - Create none case sensitive string comparison and nested function parsing
  * - Implement Glob struct and constructor
  * - Implement faster parser with switch and string hashing function
@@ -55,7 +54,6 @@ void *mainThread(void *arg0)
     char        input;
     UART_Handle uart;
     UART_Params uartParams;
-    Glob global;
 
     /* Call driver init functions */
     GPIO_init();
@@ -75,10 +73,10 @@ void *mainThread(void *arg0)
     uartParams.readReturnMode = UART_RETURN_FULL;
     uartParams.baudRate = 115200;
 
-    uart = UART_open(CONFIG_UART_0, &uartParams);
+    global.uart = UART_open(CONFIG_UART_0, &uartParams);
 
     /* Global Initialization */
-    GlobInit(&global, uart);
+    GlobInit(&global);
 
     if (uart == NULL) {
         /* UART_open() failed */

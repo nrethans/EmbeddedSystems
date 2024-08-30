@@ -11,9 +11,8 @@
  * ========== Global Initializer =======
  */
 
-void GlobInit(Glob *global, UART_Handle uart) {
+void GlobInit(Glob *global) {
     global->GlobHead = 0x5a5a5a5a;
-    global->uart = uart;
     memset(global->MsgBuff, '\0', sizeof(global->MsgBuff));
     global->index = 0;
     global->iterate = 0;
@@ -72,36 +71,4 @@ void UART_Input_Handler(Glob *global, char input) {
     }
 }
 
-//void UART_Input_Handler(UART_Handle uart, char input) {
-//    char MsgBuff[MsgBufferSize]={'\0'};
-//    int index = 0;
-//    int iterate;
-//    char  MsgBuffOverflowErr[] = "\r\nMessage buffer overflow error: Do no exceed 100 Characters\r\n";
-//
-//    if(index < sizeof(MsgBuff)-1){
-//        if(input == '\r'||input == '\n'){
-//            MsgBuff[index++]='\0';
-//            MsgParser(uart,MsgBuff);
-//            for(iterate = 0; iterate < index; iterate++){
-//                MsgBuff[iterate]='\0';
-//            }
-//            index = 0;
-//        }
-//        else if(input == 127 || input == '\b'){
-//            if(index!=0){
-//                index--;
-//            }
-//        }
-//        else{
-//            if(input != 24 && input != 25 && input != 26 && input != 27)
-//                MsgBuff[index++]=input;
-//        }
-//    }
-//    else{
-//        for(iterate = 0; iterate < MsgBufferSize; iterate++){
-//            MsgBuff[iterate]='\0';
-//        }
-//        index = 0;
-//        UART_Write_Protected(uart, MsgBuffOverflowErr);
-//    }
-//}
+
