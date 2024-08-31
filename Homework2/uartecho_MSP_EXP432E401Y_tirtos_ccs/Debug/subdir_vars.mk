@@ -15,7 +15,6 @@ C_SRCS += \
 ../CommandTerminal.c \
 ../Infrastructure.c \
 ../main_tirtos.c \
-../uartecho.c \
 ./syscfg/ti_drivers_config.c 
 
 GEN_FILES += \
@@ -28,14 +27,12 @@ C_DEPS += \
 ./CommandTerminal.d \
 ./Infrastructure.d \
 ./main_tirtos.d \
-./uartecho.d \
 ./syscfg/ti_drivers_config.d 
 
 OBJS += \
 ./CommandTerminal.obj \
 ./Infrastructure.obj \
 ./main_tirtos.obj \
-./uartecho.obj \
 ./syscfg/ti_drivers_config.obj 
 
 GEN_MISC_FILES += \
@@ -50,7 +47,6 @@ OBJS__QUOTED += \
 "CommandTerminal.obj" \
 "Infrastructure.obj" \
 "main_tirtos.obj" \
-"uartecho.obj" \
 "syscfg\ti_drivers_config.obj" 
 
 GEN_MISC_FILES__QUOTED += \
@@ -62,7 +58,6 @@ C_DEPS__QUOTED += \
 "CommandTerminal.d" \
 "Infrastructure.d" \
 "main_tirtos.d" \
-"uartecho.d" \
 "syscfg\ti_drivers_config.d" 
 
 GEN_FILES__QUOTED += \
@@ -72,7 +67,6 @@ C_SRCS__QUOTED += \
 "../CommandTerminal.c" \
 "../Infrastructure.c" \
 "../main_tirtos.c" \
-"../uartecho.c" \
 "./syscfg/ti_drivers_config.c" 
 
 SYSCFG_SRCS__QUOTED += \

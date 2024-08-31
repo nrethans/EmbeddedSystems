@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/UART.h>
 #include "ti_drivers_config.h"
@@ -22,7 +23,7 @@
  */
 
 #define Version "1"
-#define SubVersion "2"
+#define SubVersion "3"
 #define MsgBufferSize 100
 #define MsgPrintBufferSize 80
 
@@ -51,27 +52,37 @@ extern Glob global;
  * ========== Parser Functions =========
  */
 
-void HelpMsg(UART_Handle uart);
+void HelpMsg();
 
-void AboutMsg(UART_Handle uart);
+void AboutMsg();
 
-void ClearMsg(UART_Handle uart);
+void ClearMsg();
 
-void InvalidMsg(UART_Handle uart);
+void PrintMsg();
 
-void MsgParser(UART_Handle uart, char *msg);
+void InvalidMsg();
+
+bool MatchSubString(const char *msg1, const char *msg2);
+
+void MsgParser(char *msg);
 
 /*
  * ========== UART_Write_Protected =====
  */
 
-void UART_Write_Protected(UART_Handle uart, char* input);
+void UART_Write_Protected(char* input);
 
 /*
  * ========== UART_Input_Handler =======
  */
 
-void UART_Input_Handler(Glob *global, char input);
+void UART_Input_Handler(char input);
+
+/*
+ * ========== UART_Init ==============
+ */
+
+void UART_Init();
 
 #endif
 

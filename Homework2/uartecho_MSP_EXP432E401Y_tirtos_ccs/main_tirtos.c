@@ -55,7 +55,7 @@ extern void *mainThread(void *arg0);
 void __attribute__((weak)) NDK_hookInit(int32_t id) {}
 
 /*
- *  ======== main ========
+ *  ======== main ======================================================
  */
 Glob global;
 

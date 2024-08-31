@@ -19,6 +19,7 @@ CommandTerminal.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/incl
 CommandTerminal.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stddef.h
 CommandTerminal.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/ctype.h
 CommandTerminal.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/_isfuncdcl.h
+CommandTerminal.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
 CommandTerminal.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h
 CommandTerminal.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h
 CommandTerminal.obj: syscfg/ti_drivers_config.h
@@ -61,6 +62,8 @@ C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stddef.h:
 C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/ctype.h:
 
 C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/_isfuncdcl.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h:
 

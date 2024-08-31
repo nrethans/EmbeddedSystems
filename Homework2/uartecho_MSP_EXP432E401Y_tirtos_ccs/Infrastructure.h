@@ -20,12 +20,18 @@ void GlobInit(Glob *global);
  * ========== UART_Write_Protected =====
  */
 
-void UART_Write_Protected(UART_Handle uart, char* input);
+void UART_Write_Protected(char* input);
 
 /*
  * ========== UART_Input_Handler =======
  */
 
-void UART_Input_Handler(Glob *global, char input);
+void UART_Input_Handler(char input);
+
+/*
+ * ========== UART_Init ==============
+ */
+
+void UART_Init();
 
 #endif /* INFRASTRUCTURE_H */

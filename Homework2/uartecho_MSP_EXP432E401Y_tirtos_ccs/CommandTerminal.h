@@ -13,14 +13,18 @@
 /*
  * =========== Parser Functions =======
  */
-void HelpMsg(UART_Handle uart);
+void HelpMsg();
 
-void AboutMsg(UART_Handle uart);
+void AboutMsg();
 
-void ClearMsg(UART_Handle uart);
+void ClearMsg();
 
-void InvalidMsg(UART_Handle uart);
+void PrintMsg();
 
-void MsgParser(UART_Handle uart, char *msg);
+void InvalidMsg();
+
+bool MatchSubString(const char *msg1, const char *msg2);
+
+void MsgParser(char *msg);
 
 #endif /* COMMANDTERMINAL_H_ */

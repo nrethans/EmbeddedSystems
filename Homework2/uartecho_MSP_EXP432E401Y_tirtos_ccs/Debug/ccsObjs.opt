@@ -1,7 +1,6 @@
 "./CommandTerminal.obj"
 "./Infrastructure.obj"
 "./main_tirtos.obj"
-"./uartecho.obj"
 "./syscfg/ti_drivers_config.obj"
 "../MSP_EXP432E401Y_TIRTOS.cmd"
 -l"ti/display/lib/display.aem4f"
