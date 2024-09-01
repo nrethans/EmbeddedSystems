@@ -41,7 +41,7 @@ void HelpMsg() {
 
     SubStrPtr = NextSubString(global.MsgBuff, false);
     if (SubStrPtr != NULL){
-        if        (MatchSubString(SubStrPtr,"-help") || MatchSubString(SubStrPtr,"help")){
+        if        (MatchSubString(SubStrPtr, "-help") || MatchSubString(SubStrPtr,"help")){
             HelpHelpMsg();
         } else if (MatchSubString(SubStrPtr,"-about") || MatchSubString(SubStrPtr,"about")){
             HelpAboutMsg();
@@ -49,6 +49,8 @@ void HelpMsg() {
             HelpPrintMsg();
         } else if (MatchSubString(SubStrPtr,"-clear") || MatchSubString(SubStrPtr,"clear")){
             HelpClearMsg();
+        } else if (MatchSubString(SubStrPtr, "-memr") || MatchSubString(SubStrPtr,"memr")){
+            HelpMemrMsg();
         } else {
             InvalidMsg();
         }
@@ -62,8 +64,10 @@ void HelpMsg() {
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer,                  " -print -> prints message after -print \r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer,                  " -clear -> clears the terminal");
+        strcpy(MsgBuffer,                  " -clear -> clears the terminal\r\n");
         UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer,                  " -memr  -> prints memory address values");
+                UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer,                  "\r\n======================================================================\r\n");
         UART_Write_Protected(MsgBuffer);
     }
@@ -76,7 +80,7 @@ void AboutMsg() {
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer,                  " Developer: Nicholas Rethans\r\n");
     UART_Write_Protected(MsgBuffer);
-    strcpy(MsgBuffer,                  " Assignment #: 1 \r\n");
+    sprintf(MsgBuffer,                 " Assignment #: %s \r\n", Assignment);
     UART_Write_Protected(MsgBuffer);
     sprintf(MsgBuffer,                 " Version %s.%s \r\n", Version, SubVersion);
     UART_Write_Protected(MsgBuffer);
@@ -97,7 +101,53 @@ void PrintMsg(){
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer,                          "\n\n\r");
     strcat(MsgBuffer,NextSubString(global.MsgBuff,true));
-    strcat(MsgBuffer,                            "\n\r");
+    strcat(MsgBuffer,                          "\n\n\r");
+    UART_Write_Protected( MsgBuffer);
+}
+
+void MemRead(){
+    char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+    int32_t value;
+    int32_t address;
+    char *addressPTR;
+    char *MsgBuffPTR;
+
+    MsgBuffPTR = NextSubString(global.MsgBuff,false);
+    if(MsgBuffPTR == NULL){
+        address = 0;
+    } else {
+        address = strtoul(MsgBuffPTR, &addressPTR, 16);
+    }
+    address = address & 0xFFFFFFF0;
+    if((address >= 0x00000000 && address < 20000000) || (address >= 0x20040000)){
+        goto BadAddress;
+    }
+
+    strcpy(MsgBuffer, "\r\n Memory Read: \r\n");
+    UART_Write_Protected(MsgBuffer);
+    sprintf(MsgBuffer, "| %#010x | %#010x | %#010x | %#010x |\r\n",address+0xC,address+0x8,address+0x4,address+0x0);
+    UART_Write_Protected(MsgBuffer);
+    value = *(int32_t*) (address + 0xC);
+    sprintf(MsgBuffer,"| %#010x | ",value);
+    UART_Write_Protected(MsgBuffer);
+
+    value = *(int32_t*) (address + 0x8);
+    sprintf(MsgBuffer,"%#010x | ",value);
+    UART_Write_Protected(MsgBuffer);
+
+    value = *(int32_t*) (address + 0x4);
+    sprintf(MsgBuffer,"%#010x | ",value);
+    UART_Write_Protected(MsgBuffer);
+
+    value = *(int32_t*) (address + 0x0);
+    sprintf(MsgBuffer,"%#010x | \r\n",value);
+    UART_Write_Protected(MsgBuffer);
+
+    return;
+    BadAddress:
+    strcpy(MsgBuffer,"\r\nInvalid address, cannot be:");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer,"\r\n0x00000000<Address<0x20000000 or Address>0x20040000\r\n");
     UART_Write_Protected(MsgBuffer);
 }
 
@@ -168,6 +218,8 @@ void MsgParser() {
           ClearMsg();
     } else if (MatchSubString(global.MsgBuff, "-print")) {
           PrintMsg();
+    } else if (MatchSubString(global.MsgBuff, "-memr" )) {
+           MemRead();
     } else {
         InvalidMsg();
     }
@@ -228,4 +280,16 @@ void HelpClearMsg(){
     UART_Write_Protected(MsgBuffer);
 }
 
+void HelpMemrMsg(){
+    char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+
+    strcpy(MsgBuffer,                  "\r\n======================================================================\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer,                  "    -memr -> print's memory address values\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer,                  " Location -> CommandTerminal.c");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer,                  "\r\n======================================================================\r\n");
+    UART_Write_Protected(MsgBuffer);
+}
 

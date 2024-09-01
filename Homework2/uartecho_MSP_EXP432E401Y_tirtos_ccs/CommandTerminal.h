@@ -21,6 +21,8 @@ void ClearMsg();
 
 void PrintMsg();
 
+void MemRead();
+
 void InvalidMsg();
 
 /*
@@ -49,5 +51,6 @@ void HelpPrintMsg();
 
 void HelpClearMsg();
 
+void HelpMemrMsg();
 
 #endif /* COMMANDTERMINAL_H_ */

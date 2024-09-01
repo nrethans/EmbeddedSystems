@@ -1,3 +1,5 @@
-2024/08/27-22:15:38.449 3c70 Reusing MANIFEST C:\Users\NickRethans\Desktop\EmbeddedSystems\Homework1\.jxbrowser.userdata\Default\Local Storage\leveldb/MANIFEST-000001
-2024/08/27-22:15:38.458 3c70 Recovering log #3
-2024/08/27-22:15:38.459 3c70 Reusing old log C:\Users\NickRethans\Desktop\EmbeddedSystems\Homework1\.jxbrowser.userdata\Default\Local Storage\leveldb/000003.log 
+2024/08/31-21:23:45.004 18a0 Reusing MANIFEST C:\Users\NickRethans\Desktop\EmbeddedSystems\Homework2\.jxbrowser.userdata\Default\Local Storage\leveldb/MANIFEST-000001
+2024/08/31-21:23:45.013 18a0 Recovering log #3
+2024/08/31-21:23:45.014 18a0 Level-0 table #3: started
+2024/08/31-21:23:45.017 18a0 Level-0 table #3: 32858 bytes OK
+2024/08/31-21:23:45.020 18a0 Delete type=0 #3

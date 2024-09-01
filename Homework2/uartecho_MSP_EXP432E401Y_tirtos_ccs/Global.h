@@ -14,6 +14,7 @@
 #include <stddef.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/UART.h>
 #include "ti_drivers_config.h"
@@ -21,9 +22,9 @@
 /*
  * ========== Global Definitions =======
  */
-
-#define Version "1"
-#define SubVersion "3"
+#define Assignment "2"
+#define Version "2"
+#define SubVersion "0"
 #define MsgBufferSize 100
 #define MsgPrintBufferSize 80
 
@@ -60,11 +61,21 @@ void ClearMsg();
 
 void PrintMsg();
 
+void MemRead();
+
 void InvalidMsg();
+
+/*
+ * =============== SubString Functions ========
+ */
 
 bool MatchSubString(const char *msg1, const char *msg2);
 
 char* NextSubString(char *msg, bool Print);
+
+/*
+ * =============== Initial Parser =============
+ */
 
 void MsgParser();
 
@@ -79,6 +90,8 @@ void HelpAboutMsg();
 void HelpPrintMsg();
 
 void HelpClearMsg();
+
+void HelpMemrMsg();
 
 /*
  * ========== UART_Write_Protected =====
