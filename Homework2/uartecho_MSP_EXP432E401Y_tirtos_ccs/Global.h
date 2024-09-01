@@ -49,7 +49,7 @@ void GlobInit(Glob *global);
 extern Glob global;
 
 /*
- * ========== Parser Functions =========
+ * ========== First Layer Parser Functions & Messages =========
  */
 
 void HelpMsg();
@@ -64,7 +64,21 @@ void InvalidMsg();
 
 bool MatchSubString(const char *msg1, const char *msg2);
 
-void MsgParser(char *msg);
+char* NextSubString(char *msg, bool Print);
+
+void MsgParser();
+
+/*
+ * ========== Second Layer Parser Functions & Messages ========
+ */
+
+void HelpHelpMsg();
+
+void HelpAboutMsg();
+
+void HelpPrintMsg();
+
+void HelpClearMsg();
 
 /*
  * ========== UART_Write_Protected =====
