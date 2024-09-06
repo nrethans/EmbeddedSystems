@@ -119,7 +119,7 @@ void MemRead(){
         address = strtoul(MsgBuffPTR, &addressPTR, 16);
     }
     address = address & 0xFFFFFFF0;
-    if((address >= 0x00000000 && address < 20000000) || (address >= 0x20040000)){
+    if((address >= 0x00100000 && address < 20000000) || (address >= 0x20040000)){
         goto BadAddress;
     }
 
@@ -147,7 +147,7 @@ void MemRead(){
     BadAddress:
     strcpy(MsgBuffer,"\r\nInvalid address, cannot be:");
     UART_Write_Protected(MsgBuffer);
-    strcpy(MsgBuffer,"\r\n0x00000000<Address<0x20000000 or Address>0x20040000\r\n");
+    strcpy(MsgBuffer,"\r\n0x00100000<Address<0x20000000 or Address>0x20040000\r\n");
     UART_Write_Protected(MsgBuffer);
 }
 
@@ -285,9 +285,11 @@ void HelpMemrMsg(){
 
     strcpy(MsgBuffer,                  "\r\n======================================================================\r\n");
     UART_Write_Protected(MsgBuffer);
-    strcpy(MsgBuffer,                  "    -memr -> print's memory address values\r\n");
+    strcpy(MsgBuffer,                  "         -memr -> print's memory address values\r\n");
     UART_Write_Protected(MsgBuffer);
-    strcpy(MsgBuffer,                  " Location -> CommandTerminal.c");
+    strcpy(MsgBuffer,                  "      Location -> CommandTerminal.c\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer,                  " Invalid Range -> 0x00100000<Address<0x20000000 or Address>0x20040000");
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer,                  "\r\n======================================================================\r\n");
     UART_Write_Protected(MsgBuffer);

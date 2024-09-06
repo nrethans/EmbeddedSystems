@@ -46,7 +46,7 @@
 extern void *mainThread(void *arg0);
 
 /* Stack size in bytes */
-#define THREADSTACKSIZE    1024
+#define THREADSTACKSIZE    2048
 
 /*
  * The following (weak) function definition is needed in applications
