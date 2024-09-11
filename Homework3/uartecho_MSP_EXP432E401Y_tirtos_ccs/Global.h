@@ -22,13 +22,15 @@
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/UART.h>
 #include "ti_drivers_config.h"
+#include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
+#include <ti/drivers/SHA2.h>
 
 /*
  * ========== Global Definitions =======
  */
-#define Assignment "2"
-#define Version "2"
-#define SubVersion "0"
+#define Assignment "3"
+#define Version "3"
+#define SubVersion "3"
 #define MsgBufferSize 100
 #define MsgPrintBufferSize 80
 

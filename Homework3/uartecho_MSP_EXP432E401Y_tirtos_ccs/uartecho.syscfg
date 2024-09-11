@@ -60,6 +60,12 @@ UART1.interruptPriority = "4";
 UART2.$name = "CONFIG_UART_1";
 
 /**
+ * These are the reserved peripherals and settings in this configuration
+ */
+const iSHA1 = scripting.addPeripheral("SHA");
+iSHA1.$name = "MySHA1";
+
+/**
  * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
@@ -77,3 +83,5 @@ UART1.uart.rxPin.$suggestSolution     = "expansion.74";
 UART2.uart.$suggestSolution           = "UART6";
 UART2.uart.txPin.$suggestSolution     = "boosterpack2.4";
 UART2.uart.rxPin.$suggestSolution     = "boosterpack2.3";
+iSHA1.$suggestSolution                = "SHA0";
+iSHA1.DMA_MD5.$suggestSolution        = "UDMA_CH4";

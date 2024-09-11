@@ -25,6 +25,8 @@ CommandTerminal.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/
 CommandTerminal.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h
 CommandTerminal.obj: syscfg/ti_drivers_config.h
 CommandTerminal.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
+CommandTerminal.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/cryptoutils/cryptokey/CryptoKey.h
+CommandTerminal.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SHA2.h
 
 ../CommandTerminal.c:
 
@@ -75,4 +77,8 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h:
 syscfg/ti_drivers_config.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/cryptoutils/cryptokey/CryptoKey.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SHA2.h:
 

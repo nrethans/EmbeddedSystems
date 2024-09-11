@@ -1,5 +1,23 @@
-2024/08/31-21:23:45.004 18a0 Reusing MANIFEST C:\Users\NickRethans\Desktop\EmbeddedSystems\Homework2\.jxbrowser.userdata\Default\Local Storage\leveldb/MANIFEST-000001
-2024/08/31-21:23:45.013 18a0 Recovering log #3
-2024/08/31-21:23:45.014 18a0 Level-0 table #3: started
-2024/08/31-21:23:45.017 18a0 Level-0 table #3: 32858 bytes OK
-2024/08/31-21:23:45.020 18a0 Delete type=0 #3
+2024/09/08-21:46:07.854 a78 Reusing MANIFEST C:\Users\NickRethans\Desktop\EmbeddedSystems\Homework3\.jxbrowser.userdata\Default\Local Storage\leveldb/MANIFEST-000001
+2024/09/08-21:46:07.869 a78 Recovering log #4
+2024/09/08-21:46:07.870 a78 Reusing old log C:\Users\NickRethans\Desktop\EmbeddedSystems\Homework3\.jxbrowser.userdata\Default\Local Storage\leveldb/000004.log 
+2024/09/08-21:47:21.265 3c4 Level-0 table #7: started
+2024/09/08-21:47:21.277 3c4 Level-0 table #7: 34114 bytes OK
+2024/09/08-21:47:21.283 3c4 Delete type=0 #4
+2024/09/08-21:51:22.848 19e0 Level-0 table #9: started
+2024/09/08-21:51:22.917 19e0 Level-0 table #9: 33164 bytes OK
+2024/09/08-21:51:22.923 19e0 Delete type=0 #6
+2024/09/08-21:53:21.264 4a20 Level-0 table #11: started
+2024/09/08-21:53:21.275 4a20 Level-0 table #11: 24292 bytes OK
+2024/09/08-21:53:21.281 4a20 Delete type=0 #8
+2024/09/08-21:53:21.299 4a20 Compacting 4@0 + 0@1 files
+2024/09/08-21:53:21.311 4a20 Generated table #12@0: 12 keys, 17776 bytes
+2024/09/08-21:53:21.311 4a20 Compacted 4@0 + 0@1 files => 17776 bytes
+2024/09/08-21:53:21.314 4a20 compacted to: files[ 0 1 0 0 0 0 0 ]
+2024/09/08-21:53:21.318 4a20 Delete type=2 #3
+2024/09/08-21:53:21.318 4a20 Delete type=2 #7
+2024/09/08-21:53:21.318 4a20 Delete type=2 #9
+2024/09/08-21:53:21.318 4a20 Delete type=2 #11
+2024/09/09-09:58:18.781 227c Level-0 table #14: started
+2024/09/09-09:58:18.785 227c Level-0 table #14: 30704 bytes OK
+2024/09/09-09:58:18.787 227c Delete type=0 #10

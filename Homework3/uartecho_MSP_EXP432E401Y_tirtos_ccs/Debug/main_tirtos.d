@@ -25,6 +25,8 @@ main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h
 main_tirtos.obj: syscfg/ti_drivers_config.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
+main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/cryptoutils/cryptokey/CryptoKey.h
+main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SHA2.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/pthread.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sys/types.h
 main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/sys/_internal.h
@@ -144,6 +146,10 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h:
 syscfg/ti_drivers_config.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/cryptoutils/cryptokey/CryptoKey.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SHA2.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs/pthread.h:
 

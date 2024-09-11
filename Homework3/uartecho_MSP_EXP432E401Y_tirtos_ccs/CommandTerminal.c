@@ -25,6 +25,9 @@ void *mainThread(void *arg0)
         }
     }
 }
+/*
+ * =============== SHA-256 Version Hashing ========================
+ */
 
 /*
  * =============== First Layer Parser Functions & Messages ========
@@ -55,24 +58,6 @@ void HelpParse() {
         }
 
     } else {
-//        strcpy(MsgBuffer,                  "\r\n======================================================================\r\n");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  " -help  -> provides list of function descriptions\r\n");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  " -about -> provides developer and version info\r\n");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  " -print -> prints message after -print \r\n");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  " -clear -> clears the terminal\r\n");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  " -memr  -> prints memory address values\r\n");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  " -gpio  -> interfaces with GPIO pins\r\n");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  " Type -help <command> for more information");
-//        UART_Write_Protected(MsgBuffer);
-//        strcpy(MsgBuffer,                  "\r\n======================================================================\r\n");
-//        UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "\r\n====================================================================\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -help\r\n");
@@ -210,8 +195,18 @@ void GPIOParse() {
                 UART_Write_Protected(MsgBuffer);
 
             } else if (MatchSubString(MsgBuffPTR,"w")) {
-                global.GPIO_Val.GPIO_LED0 = 1;
-                GPIO_write(CONFIG_GPIO_LED0,1);
+                MsgBuffPTR = NextSubString(MsgBuffPTR,false);
+                if        (MatchSubString(MsgBuffPTR,"1")) {
+                    global.GPIO_Val.GPIO_LED0 = 1;
+                    GPIO_write(CONFIG_GPIO_LED0,1);
+                } else if (MatchSubString(MsgBuffPTR,"0")) {
+                    global.GPIO_Val.GPIO_LED0 = 0;
+                    GPIO_write(CONFIG_GPIO_LED0,0);
+                } else{
+                    strcpy(MsgBuffer,  "\r\nInvalid GPIO Action, Specify Write Val\r\n");
+                    UART_Write_Protected(MsgBuffer);
+                    global.Error.InvalidGPIOAction++;
+                }
                 goto PrintDone;
             } else if (MatchSubString(MsgBuffPTR,"t")) {
                 if(global.GPIO_Val.GPIO_LED0==0){
@@ -241,8 +236,18 @@ void GPIOParse() {
                 UART_Write_Protected(MsgBuffer);
 
             } else if (MatchSubString(MsgBuffPTR,"w")) {
-                global.GPIO_Val.GPIO_LED1 = 1;
-                GPIO_write(CONFIG_GPIO_LED1,1);
+                MsgBuffPTR = NextSubString(MsgBuffPTR,false);
+                if        (MatchSubString(MsgBuffPTR,"1")) {
+                    global.GPIO_Val.GPIO_LED1 = 1;
+                    GPIO_write(CONFIG_GPIO_LED1,1);
+                } else if (MatchSubString(MsgBuffPTR,"0")) {
+                    global.GPIO_Val.GPIO_LED1 = 0;
+                    GPIO_write(CONFIG_GPIO_LED1,0);
+                } else{
+                    strcpy(MsgBuffer,  "\r\nInvalid GPIO Action, Specify Write Val\r\n");
+                    UART_Write_Protected(MsgBuffer);
+                    global.Error.InvalidGPIOAction++;
+                }
                 goto PrintDone;
 
             } else if (MatchSubString(MsgBuffPTR,"t")) {
@@ -274,8 +279,18 @@ void GPIOParse() {
                 UART_Write_Protected(MsgBuffer);
 
             } else if (MatchSubString(MsgBuffPTR,"w")) {
-                global.GPIO_Val.GPIO_LED2 = 1;
-                GPIO_write(CONFIG_GPIO_LED2,1);
+                MsgBuffPTR = NextSubString(MsgBuffPTR,false);
+                if        (MatchSubString(MsgBuffPTR,"1")) {
+                    global.GPIO_Val.GPIO_LED2 = 1;
+                    GPIO_write(CONFIG_GPIO_LED2,1);
+                } else if (MatchSubString(MsgBuffPTR,"0")) {
+                    global.GPIO_Val.GPIO_LED2 = 0;
+                    GPIO_write(CONFIG_GPIO_LED2,0);
+                } else{
+                    strcpy(MsgBuffer,  "\r\nInvalid GPIO Action, Specify Write Val\r\n");
+                    UART_Write_Protected(MsgBuffer);
+                    global.Error.InvalidGPIOAction++;
+                }
                 goto PrintDone;
 
             } else if (MatchSubString(MsgBuffPTR,"t")) {
@@ -307,8 +322,18 @@ void GPIOParse() {
                 UART_Write_Protected(MsgBuffer);
 
             } else if (MatchSubString(MsgBuffPTR,"w")) {
-                global.GPIO_Val.GPIO_LED3 = 1;
-                GPIO_write(CONFIG_GPIO_LED3,1);
+                MsgBuffPTR = NextSubString(MsgBuffPTR,false);
+                if        (MatchSubString(MsgBuffPTR,"1")) {
+                    global.GPIO_Val.GPIO_LED3 = 1;
+                    GPIO_write(CONFIG_GPIO_LED3,1);
+                } else if (MatchSubString(MsgBuffPTR,"0")) {
+                    global.GPIO_Val.GPIO_LED3 = 0;
+                    GPIO_write(CONFIG_GPIO_LED3,0);
+                } else{
+                    strcpy(MsgBuffer,  "\r\nInvalid GPIO Action, Specify Write Val\r\n");
+                    UART_Write_Protected(MsgBuffer);
+                    global.Error.InvalidGPIOAction++;
+                }
                 goto PrintDone;
 
             } else if (MatchSubString(MsgBuffPTR,"t")) {
@@ -340,8 +365,18 @@ void GPIOParse() {
                 UART_Write_Protected(MsgBuffer);
 
             } else if (MatchSubString(MsgBuffPTR,"w")) {
-                global.GPIO_Val.GPIO_AUDIO_PWR = 1;
-                GPIO_write(CONFIG_GPIO_AUDIO_PWR,1);
+                MsgBuffPTR = NextSubString(MsgBuffPTR,false);
+                if        (MatchSubString(MsgBuffPTR,"1")) {
+                    global.GPIO_Val.GPIO_AUDIO_PWR = 1;
+                    GPIO_write(CONFIG_GPIO_AUDIO_PWR,1);
+                } else if (MatchSubString(MsgBuffPTR,"0")) {
+                    global.GPIO_Val.GPIO_AUDIO_PWR = 0;
+                    GPIO_write(CONFIG_GPIO_AUDIO_PWR,0);
+                } else{
+                    strcpy(MsgBuffer,  "\r\nInvalid GPIO Action, Specify Write Val\r\n");
+                    UART_Write_Protected(MsgBuffer);
+                    global.Error.InvalidGPIOAction++;
+                }
                 goto PrintDone;
 
             } else if (MatchSubString(MsgBuffPTR,"t")) {
@@ -363,7 +398,7 @@ void GPIOParse() {
         }
         case 5: {
             if        (*MsgBuffPTR == NULL)            {
-                global.GPIO_Val.GPIO_LED0 = GPIO_read(CONFIG_GPIO_LED0);
+                global.GPIO_Val.GPIO_MIC_PWR = GPIO_read(CONFIG_GPIO_LED0);
                 sprintf(MsgBuffer, "\r\nGPIO MIC PWR: %hhu\r\n", global.GPIO_Val.GPIO_MIC_PWR);
                 UART_Write_Protected(MsgBuffer);
 
@@ -373,8 +408,18 @@ void GPIOParse() {
                 UART_Write_Protected(MsgBuffer);
 
             } else if (MatchSubString(MsgBuffPTR,"w")) {
-                global.GPIO_Val.GPIO_MIC_PWR = 1;
-                GPIO_write(CONFIG_GPIO_MIC_PWR,1);
+                MsgBuffPTR = NextSubString(MsgBuffPTR,false);
+                if        (MatchSubString(MsgBuffPTR,"1")) {
+                    global.GPIO_Val.GPIO_MIC_PWR = 1;
+                    GPIO_write(CONFIG_GPIO_MIC_PWR,1);
+                } else if (MatchSubString(MsgBuffPTR,"0")) {
+                    global.GPIO_Val.GPIO_MIC_PWR = 0;
+                    GPIO_write(CONFIG_GPIO_MIC_PWR,0);
+                } else{
+                    strcpy(MsgBuffer,  "\r\nInvalid GPIO Action, Specify Write Val\r\n");
+                    UART_Write_Protected(MsgBuffer);
+                    global.Error.InvalidGPIOAction++;
+                }
                 goto PrintDone;
 
             } else if (MatchSubString(MsgBuffPTR,"t")) {
@@ -489,6 +534,15 @@ void GPIOParse() {
 
 void ErrorMsg(){
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+    char *StrBuffPTR;
+    StrBuffPTR = NextSubString(global.MsgBuff,false);
+    if(MatchSubString(StrBuffPTR, "clear") || MatchSubString(StrBuffPTR, "-clear")){
+        global.Error.InvalidCMD        = 0;
+        global.Error.InputOverflow     = 0;
+        global.Error.InvalidAddress    = 0;
+        global.Error.InvalidGPIOPin    = 0;
+        global.Error.InvalidGPIOAction = 0;
+    }
 
     strcpy (MsgBuffer,"\r\n==========================================\r\n");
     UART_Write_Protected(MsgBuffer);
@@ -696,7 +750,7 @@ void HelpErrorMsg() {
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer, "  Description : Lists number of errors since last reset\r\n");
     UART_Write_Protected(MsgBuffer);
-    strcpy(MsgBuffer, "  Location    : [Location information missing]\r\n");
+    strcpy(MsgBuffer, "  Location    : CommandTerminal.c\r\n");
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer, "==============================================================================\r\n");
     UART_Write_Protected(MsgBuffer);
