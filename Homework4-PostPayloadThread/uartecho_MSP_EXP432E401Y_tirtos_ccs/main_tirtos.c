@@ -57,18 +57,6 @@ Glob global;
 int main(void)
 {
     Board_init();
-
-    GPIO_init();
-    UART_Init();
-    GlobInit(&global);
-    Timer_Init();
-
-    global.Bios.QueueSemaphore   = semaphore1;
-
-    global.Bios.PayloadGate      = gateSwi0;
-    GPIO_enableInt(CONFIG_GPIO_SW1);
-    GPIO_enableInt(CONFIG_GPIO_SW2);
-
     BIOS_start(); //Causes all threads/tasks to be launched
     return (0);
 }

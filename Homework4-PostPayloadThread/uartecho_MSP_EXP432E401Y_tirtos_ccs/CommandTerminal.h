@@ -79,4 +79,8 @@ void HelpGPIOMsg();
 
 void HelpErrorMsg();
 
+void HelpTimerMsg();
+
+void HelpCallbackMsg();
+
 #endif /* COMMANDTERMINAL_H_ */

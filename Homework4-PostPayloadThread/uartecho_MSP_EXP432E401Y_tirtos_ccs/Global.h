@@ -41,23 +41,19 @@
  */
 #define Assignment "4"
 #define Version "4"
-#define SubVersion "0"
+#define SubVersion "5"
 #define MsgBufferSize 100
 #define MsgPrintBufferSize 112 //80 for PuTTY width & 32 for \r\n (each is 1 byte)
-#define MsgBreaker "\r\n================================================================================\r\n"
+#define MsgBreaker "--------------------------------------------------------------------------------\r\n"
 #define MsgQueueLen 32
 #define MsgQueueMsgLen 320
 
-
 extern Semaphore_Handle semaphore1;
-
-
 extern GateSwi_Handle gateSwi0;
 extern GateSwi_Handle gateSwi1;
-
 extern Task_Handle task0;
 extern Task_Handle task1;
-
+extern Task_Handle task2;
 extern Swi_Handle swi0;
 extern Swi_Handle swi1;
 extern Swi_Handle swi2;
@@ -94,17 +90,26 @@ typedef struct MsgInput{
 typedef struct Bios{
     Semaphore_Handle QueueSemaphore;
     GateSwi_Handle   PayloadGate;
+    GateSwi_Handle   CallbackGate;
+    Task_Handle      InputTask;
+    Task_Handle      PayloadTask;
+    Task_Handle      AAATask;
+    Swi_Handle       Timer1SWI;
+    Swi_Handle       SW1SWI;
+    Swi_Handle       SW2SWI;
 } Bios;
 
-typedef struct Callbacks{
-    char Callback0[MsgBufferSize];
-    char Callback1[MsgBufferSize];
-    char Callback2[MsgBufferSize];
-    char Callback3[MsgBufferSize];
-    int32_t Callback0Rep;
-    int32_t Callback1Rep;
-    int32_t Callback2Rep;
-    int32_t Callback3Rep;
+typedef enum {
+    CALLBACK_0 = 0,
+    CALLBACK_1,
+    CALLBACK_2,
+    CALLBACK_3,
+    NUM_CALLBACKS
+} CallbackEnum;
+
+typedef struct Callbacks {
+    char Callback[NUM_CALLBACKS][MsgBufferSize];
+    int32_t CallbackRep[NUM_CALLBACKS];
 } Callbacks;
 
 typedef struct Glob {
@@ -119,6 +124,7 @@ typedef struct Glob {
     int32_t      GlobTail;
 } Glob;
 
+
 /*
  * ========== Threads =================
  */
@@ -126,6 +132,9 @@ typedef struct Glob {
 void UART_Thread();
 
 void Payload_Thread();
+
+void TaskAAA();
+
 
 /*
  * ========== Inter-Thread Functions ==
@@ -220,6 +229,10 @@ void HelpMemrMsg();
 void HelpGPIOMsg();
 
 void HelpErrorMsg();
+
+void HelpTimerMsg();
+
+void HelpCallbackMsg();
 
 /*
  * ========== UART =====================

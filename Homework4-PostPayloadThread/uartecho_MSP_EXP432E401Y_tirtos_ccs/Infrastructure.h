@@ -11,6 +11,12 @@
 #include "Global.h"
 
 /*
+ * ========== AAA Thread =========
+ */
+
+void TaskAAA();
+
+/*
  * ========== Initializers =======
  */
 

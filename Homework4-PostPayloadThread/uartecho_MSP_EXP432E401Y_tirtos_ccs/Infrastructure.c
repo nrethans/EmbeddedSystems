@@ -8,26 +8,60 @@
 #include "Global.h"
 
 /*
+ * ========== AAA Thread =========
+ */
+
+void TaskAAA(){
+    GPIO_init();
+    GPIO_enableInt(CONFIG_GPIO_SW1);
+    GPIO_enableInt(CONFIG_GPIO_SW2);
+    UART_Init();
+    GlobInit(&global);
+    Timer_Init();
+    ClearMsg();
+    AboutMsg();
+}
+
+/*
  * ========== Initializers =======
  */
 
 void GlobInit(Glob *global) {
-    global->GlobHead                = 0x5a5a5a5a;
+    global->GlobHead                  = 0x5a5a5a5a;
+
+    global->MsgInput.index            = 0;
     memset(global->MsgInput.MsgBuff, '\0', sizeof(global->MsgInput.MsgBuff));
-    global->MsgInput.index          = 0;
-    global->MsgQueue.Write          = 0;
-    global->MsgQueue.Read           = 0;
-    global->Callbacks.Callback0Rep  = 0;
-    global->Callbacks.Callback1Rep  = 0;
-    global->Callbacks.Callback2Rep  = 0;
-    global->Callbacks.Callback3Rep  = 0;
-    global->Error.InvalidCMD        = 0;
-    global->Error.InputOverflow     = 0;
-    global->Error.InvalidAddress    = 0;
-    global->Error.InvalidGPIOPin    = 0;
-    global->Error.InvalidGPIOAction = 0;
+
+    global->MsgQueue.Write            = 0;
+    global->MsgQueue.Read             = 0;
     memset(global->MsgQueue.MsgQueue, '\0',sizeof(global->MsgQueue.MsgQueue));
-    global->GlobTail                = 0x5a5a5a5a;
+
+    global->Callbacks.CallbackRep[0]  = 0;
+    global->Callbacks.CallbackRep[1]  = 0;
+    global->Callbacks.CallbackRep[2]  = 0;
+    global->Callbacks.CallbackRep[3]  = 0;
+    int i;
+    for(i = 0; i < NUM_CALLBACKS; i++){
+        memset(global->Callbacks.Callback[i], '\0', sizeof(global->Callbacks.Callback[i]));
+    }
+
+    global->Error.InvalidCMD          = 0;
+    global->Error.InputOverflow       = 0;
+    global->Error.InvalidAddress      = 0;
+    global->Error.InvalidGPIOPin      = 0;
+    global->Error.InvalidGPIOAction   = 0;
+
+    global->Bios.QueueSemaphore   = semaphore1;
+    global->Bios.PayloadGate      = gateSwi0;
+    global->Bios.CallbackGate     = gateSwi1;
+    global->Bios.InputTask        = task0;
+    global->Bios.PayloadTask      = task1;
+    global->Bios.AAATask          = task2;
+    global->Bios.Timer1SWI        = swi0;
+    global->Bios.SW1SWI           = swi1;
+    global->Bios.SW2SWI           = swi2;
+
+    global->GlobTail                  = 0x5a5a5a5a;
 }
 
 void UART_Init(){
@@ -42,8 +76,6 @@ void UART_Init(){
     uartParams.baudRate = 115200;
 
     global.uart = UART_open(CONFIG_UART_0, &uartParams);
-
-//    GlobInit(&global);
 
     if (global.uart == NULL) {
         /* UART_open() failed */
@@ -97,37 +129,43 @@ void GPIO_SW2_Callback(){
  * ========== SWI ======================
  */
 
-void Timer0Swi(){
-    if        (global.Callbacks.Callback0Rep == -1){
-        AddPayload(global.Callbacks.Callback0);
-    } else if (global.Callbacks.Callback0Rep > 0  ){
-        AddPayload(global.Callbacks.Callback0);
-        global.Callbacks.Callback0Rep--;
+void Timer0Swi() {
+    int32_t gatekey;
+    gatekey = GateSwi_enter(global.Bios.CallbackGate);
+    if (global.Callbacks.CallbackRep[CALLBACK_0] == -1) {
+        AddPayload(global.Callbacks.Callback[CALLBACK_0]);
+    } else if (global.Callbacks.CallbackRep[CALLBACK_0] > 0) {
+        AddPayload(global.Callbacks.Callback[CALLBACK_0]);
+        global.Callbacks.CallbackRep[CALLBACK_0]--;
     } else {
         Timer_stop(global.Timer1.Handle);
     }
+    GateSwi_leave(global.Bios.CallbackGate,gatekey);
 }
 
-void SW1_Swi(){
-    if(global.Callbacks.Callback1Rep == -1){
-        AddPayload(global.Callbacks.Callback1);
+void SW1_Swi() {
+    int32_t gatekey;
+    gatekey = GateSwi_enter(global.Bios.CallbackGate);
+    if (global.Callbacks.CallbackRep[CALLBACK_1] == -1) {
+        AddPayload(global.Callbacks.Callback[CALLBACK_1]);
+    } else if (global.Callbacks.CallbackRep[CALLBACK_1] > 0) {
+        AddPayload(global.Callbacks.Callback[CALLBACK_1]);
+        global.Callbacks.CallbackRep[CALLBACK_1]--;
     }
-    if(global.Callbacks.Callback1Rep > 0  ){
-        AddPayload(global.Callbacks.Callback1);
-        global.Callbacks.Callback1Rep--;
-    }
+    GateSwi_leave(global.Bios.CallbackGate,gatekey);
 }
 
-void SW2_Swi(){
-    if(global.Callbacks.Callback2Rep == -1){
-        AddPayload(global.Callbacks.Callback2);
+void SW2_Swi() {
+    int32_t gatekey;
+    gatekey = GateSwi_enter(global.Bios.CallbackGate);
+    if (global.Callbacks.CallbackRep[CALLBACK_2] == -1) {
+        AddPayload(global.Callbacks.Callback[CALLBACK_2]);
+    } else if (global.Callbacks.CallbackRep[CALLBACK_2] > 0) {
+        AddPayload(global.Callbacks.Callback[CALLBACK_2]);
+        global.Callbacks.CallbackRep[CALLBACK_2]--;
     }
-    if(global.Callbacks.Callback2Rep > 0  ){
-        AddPayload(global.Callbacks.Callback2);
-        global.Callbacks.Callback2Rep--;
-    }
+    GateSwi_leave(global.Bios.CallbackGate,gatekey);
 }
-
 
 
 /*

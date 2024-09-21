@@ -7,8 +7,10 @@
 
 #include "Global.h"
 
+
+
 /*
- * =============== UART Thread ===============
+ * =============== UART Thread =========================
  */
 void UART_Thread() //Priority 4
 {
@@ -100,20 +102,24 @@ void HelpParse() {
 
     SubStrPtr = NextSubString(global.MsgQueue.MsgQueue[index], false);
     if (SubStrPtr != NULL){
-        if        (MatchSubString(SubStrPtr, "-help" ) || MatchSubString(SubStrPtr,"help" )){
+        if        (MatchSubString(SubStrPtr,    "-help" ) || MatchSubString(SubStrPtr,"help" )){
              HelpHelpMsg();
-        } else if (MatchSubString(SubStrPtr,"-about" ) || MatchSubString(SubStrPtr,"about")){
+        } else if (MatchSubString(SubStrPtr,   "-about" ) || MatchSubString(SubStrPtr,"about")){
             HelpAboutMsg();
-        } else if (MatchSubString(SubStrPtr,"-print" ) || MatchSubString(SubStrPtr,"print")){
+        } else if (MatchSubString(SubStrPtr,   "-print" ) || MatchSubString(SubStrPtr,"print")){
             HelpPrintMsg();
-        } else if (MatchSubString(SubStrPtr,"-clear" ) || MatchSubString(SubStrPtr,"clear")){
+        } else if (MatchSubString(SubStrPtr,   "-clear" ) || MatchSubString(SubStrPtr,"clear")){
             HelpClearMsg();
-        } else if (MatchSubString(SubStrPtr, "-memr" ) || MatchSubString(SubStrPtr,"memr" )){
+        } else if (MatchSubString(SubStrPtr,    "-memr" ) || MatchSubString(SubStrPtr,"memr" )){
              HelpMemrMsg();
-        } else if (MatchSubString(SubStrPtr, "-gpio" ) || MatchSubString(SubStrPtr,"gpio" )){
+        } else if (MatchSubString(SubStrPtr,    "-gpio" ) || MatchSubString(SubStrPtr,"gpio" )){
              HelpGPIOMsg();
-        } else if (MatchSubString(SubStrPtr, "-error") || MatchSubString(SubStrPtr,"error")){
+        } else if (MatchSubString(SubStrPtr,    "-error") || MatchSubString(SubStrPtr,"error")){
             HelpErrorMsg();
+        } else if (MatchSubString(SubStrPtr,    "-timer") || MatchSubString(SubStrPtr,"timer")){
+            HelpTimerMsg();
+        } else if (MatchSubString(SubStrPtr, "-callback") || MatchSubString(SubStrPtr,"callback")){
+            HelpCallbackMsg();
         } else {
             InvalidMsg();
         }
@@ -123,33 +129,41 @@ void HelpParse() {
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -help\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "              : Provides list of function descriptions\r\n\n");
+        strcpy(MsgBuffer, "              : Provides list of function descriptions\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -about\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "              : Provides developer and version info\r\n\n");
+        strcpy(MsgBuffer, "              : Provides developer and version info\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -print\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "              : Prints message after -print\r\n\n");
+        strcpy(MsgBuffer, "              : Prints message after -print\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -clear\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "              : Clears the terminal\r\n\n");
+        strcpy(MsgBuffer, "              : Clears the terminal\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -memr\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "              : Prints memory address values\r\n\n");
+        strcpy(MsgBuffer, "              : Prints memory address values\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -gpio\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "              : Interfaces with GPIO pins\r\n\n");
+        strcpy(MsgBuffer, "              : Interfaces with GPIO pins\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -error\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "              : Prints number of error occurrences\r\n\n");
+        strcpy(MsgBuffer, "              : Prints number of error occurrences\r\n");
         UART_Write_Protected(MsgBuffer);
-        strcpy(MsgBuffer, "  Note        : Type -help <command> for more information\r\n");
+        strcpy(MsgBuffer, "  Command     : -timer\r\n");
+        UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "              : Lists timer period and configures hardware timers\r\n");
+        UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "  Command     : -callback\r\n");
+        UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "              : Lists and configures callbacks \r\n");
+        UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "  **Note**    : Type -help <command> for more information\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, MsgBreaker);
         UART_Write_Protected(MsgBuffer);
@@ -163,11 +177,11 @@ void AboutMsg() {
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer,                  " Developer: Nicholas Rethans\r\n");
     UART_Write_Protected(MsgBuffer);
-    sprintf(MsgBuffer,                 " Assignment #: %s \r\n", Assignment);
+    sprintf(MsgBuffer,                 " Assignment #%s \r\n", Assignment);
     UART_Write_Protected(MsgBuffer);
     sprintf(MsgBuffer,                 " Version %s.%s \r\n", Version, SubVersion);
     UART_Write_Protected(MsgBuffer);
-    sprintf(MsgBuffer,                 " Time: %s  Date: %s", __TIME__, __DATE__);
+    sprintf(MsgBuffer,                 " Time: %s  Date: %s\r\n", __TIME__, __DATE__);
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer,                  MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -328,7 +342,7 @@ void GPIOParse() {
         UART_Write_Protected(MsgBuffer);
         sprintf(MsgBuffer,"       GPIO SW1: %hhu\r\n", GPIO_read(CONFIG_GPIO_SW1      ));
         UART_Write_Protected(MsgBuffer);
-        sprintf(MsgBuffer,"       GPIO SW2: %hhu",     GPIO_read(CONFIG_GPIO_SW2      ));
+        sprintf(MsgBuffer,"       GPIO SW2: %hhu\r\n", GPIO_read(CONFIG_GPIO_SW2      ));
         UART_Write_Protected(MsgBuffer);
         strcpy (MsgBuffer,MsgBreaker);
         UART_Write_Protected(MsgBuffer);
@@ -391,7 +405,7 @@ void ErrorMsg(){
     UART_Write_Protected(MsgBuffer);
     sprintf(MsgBuffer,"(3) Invalid GPIO Pin   : %hhu\r\n",global.Error.InvalidGPIOPin);
     UART_Write_Protected(MsgBuffer);
-    sprintf(MsgBuffer,"(4) Invalid GPIO Action: %hhu",global.Error.InvalidGPIOAction);
+    sprintf(MsgBuffer,"(4) Invalid GPIO Action: %hhu\r\n",global.Error.InvalidGPIOAction);
     UART_Write_Protected(MsgBuffer);
     strcpy (MsgBuffer,MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -438,80 +452,63 @@ void TimerParse(){
     }
 }
 
-
 void CallbackParse() {
-    // Format: -callback <callback num> <repetitions> <payload>
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     char *StrBuffPTR;
-    int32_t index;
+    int32_t index = global.MsgQueue.Read;
     int32_t CallbackNum = -1;
     int32_t Repetitions = -1;
-    index = global.MsgQueue.Read;
+    int i;
 
     StrBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index], false);
 
-    if (StrBuffPTR == NULL) {
-        sprintf(MsgBuffer, MsgBreaker);
-        UART_Write_Protected(MsgBuffer);
-        sprintf(MsgBuffer, "Callbacks:\r\n");
-        UART_Write_Protected(MsgBuffer);
-        sprintf(MsgBuffer, "Callback 0: %d, %s\r\n", global.Callbacks.Callback0Rep, global.Callbacks.Callback0);
-        UART_Write_Protected(MsgBuffer);
-        sprintf(MsgBuffer, "Callback 1: %d, %s\r\n", global.Callbacks.Callback1Rep, global.Callbacks.Callback1);
-        UART_Write_Protected(MsgBuffer);
-        sprintf(MsgBuffer, "Callback 2: %d, %s\r\n", global.Callbacks.Callback2Rep, global.Callbacks.Callback2);
-        UART_Write_Protected(MsgBuffer);
-        sprintf(MsgBuffer, "Callback 3: %d, %s", global.Callbacks.Callback3Rep, global.Callbacks.Callback3);
-        UART_Write_Protected(MsgBuffer);
-        sprintf(MsgBuffer, MsgBreaker);
+    if (!StrBuffPTR) {
+        UART_Write_Protected(MsgBreaker);
+        for(i = 0; i < NUM_CALLBACKS; i++){
+            sprintf(MsgBuffer, "Callback %d: %d, %s\r\n", i, global.Callbacks.CallbackRep[i], global.Callbacks.Callback[i]);
+            UART_Write_Protected(MsgBuffer);
+        }
+        UART_Write_Protected(MsgBreaker);
+        return;
+    }
+
+    if(MatchSubString(StrBuffPTR, "clear") || MatchSubString(StrBuffPTR, "-clear")){
+        global.Callbacks.CallbackRep[0]  = 0;
+        global.Callbacks.CallbackRep[1]  = 0;
+        global.Callbacks.CallbackRep[2]  = 0;
+        global.Callbacks.CallbackRep[3]  = 0;
+        for(i = 0; i < NUM_CALLBACKS; i++){
+            memset(global.Callbacks.Callback[i], '\0', sizeof(global.Callbacks.Callback[i]));
+        }
+        strcpy(MsgBuffer, "Callbacks Cleared\r\n");
         UART_Write_Protected(MsgBuffer);
         return;
     }
 
     CallbackNum = strtol(StrBuffPTR, NULL, 10);
+    if (CallbackNum < 0 || CallbackNum >= NUM_CALLBACKS) {
+        UART_Write_Protected("\r\nInvalid Callback Num\r\n");
+        return;
+    }
 
     StrBuffPTR = NextSubString(StrBuffPTR, false);
-    if (StrBuffPTR == NULL) {
-        // Missing repetitions error
-        strcpy(MsgBuffer, "\r\nMissing number of repetitions\r\n");
+    if (!StrBuffPTR) {
+        sprintf(MsgBuffer, "Callback %d: %d: %s\r\n", CallbackNum, global.Callbacks.CallbackRep[CallbackNum], global.Callbacks.Callback[CallbackNum]);
         UART_Write_Protected(MsgBuffer);
         return;
     }
 
     Repetitions = strtol(StrBuffPTR, NULL, 10);
-
     StrBuffPTR = NextSubString(StrBuffPTR, false);
-    if (StrBuffPTR == NULL) {
-        strcpy(MsgBuffer, "\r\nMissing Payload\r\n");
-        UART_Write_Protected(MsgBuffer);
+
+    if (!StrBuffPTR) {
+        UART_Write_Protected("\r\nMissing Payload\r\n");
         return;
     }
 
-    switch (CallbackNum) {
-        case 0:  // Timer Callback
-            strcpy(global.Callbacks.Callback0, StrBuffPTR);
-            global.Callbacks.Callback0Rep = Repetitions;
-            break;
-        case 1:  // SW1 Callback
-            strcpy(global.Callbacks.Callback1, StrBuffPTR);
-            global.Callbacks.Callback1Rep = Repetitions;
-            break;
-        case 2:  // SW2 Callback
-            strcpy(global.Callbacks.Callback2, StrBuffPTR);
-            global.Callbacks.Callback2Rep = Repetitions;
-            break;
-        case 3:  // Script Callback
-            strcpy(global.Callbacks.Callback3, StrBuffPTR);
-            global.Callbacks.Callback3Rep = Repetitions;
-            break;
-        default:
-            // Invalid callback number error
-            strcpy(MsgBuffer, "\r\nInvalid callback number\r\n");
-            UART_Write_Protected(MsgBuffer);
-    }
+    strcpy(global.Callbacks.Callback[CallbackNum], StrBuffPTR);
+    global.Callbacks.CallbackRep[CallbackNum] = Repetitions;
 }
-
-
 
 void InvalidMsg() {
     global.Error.InvalidCMD++;
@@ -740,6 +737,58 @@ void HelpErrorMsg() {
     strcpy(MsgBuffer, "              : 3: Invalid GPIO Pin\r\n");
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer, "              : 4: Invalid Action\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Location    : CommandTerminal.c\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+}
+
+void HelpTimerMsg(){
+    char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Command     : -timer\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Description : Lists timer periods and configures hardware timers\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Description : Secondary arg '0' will stop timer\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Description : Secondary arg '1' will start timer\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Secondary arg 101+ will set timer period in microseconds\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Location    : CommandTerminal.c\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+}
+
+void HelpCallbackMsg(){
+    char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Command     : -callback\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Description : Lists and configures callbacks\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Description : Secondary arg -clear will reset all callback configurations\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Callback Configuration:\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : -callback <callback num> <repetitions> <payload>\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : **Note:\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : repetitions = -1 sets infinite repetitions\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Callback 0 is tied to timer1\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Callback 1 is tied to SW1\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Callback 2 is tied to SW2\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Callback 3 is not configured\r\n");
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer, "  Location    : CommandTerminal.c\r\n");
     UART_Write_Protected(MsgBuffer);
