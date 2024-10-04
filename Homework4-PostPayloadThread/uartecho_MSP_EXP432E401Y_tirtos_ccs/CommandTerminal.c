@@ -356,7 +356,6 @@ void ErrorMsg(){
     int32_t index;
     index = global.MsgQueue.Read;
 
-
     StrBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index],false);
     if(MatchSubString(StrBuffPTR, "clear") || MatchSubString(StrBuffPTR, "-clear")){
         global.Error.InvalidCMD        = 0;
@@ -364,6 +363,7 @@ void ErrorMsg(){
         global.Error.InvalidAddress    = 0;
         global.Error.InvalidGPIOPin    = 0;
         global.Error.InvalidGPIOAction = 0;
+        global.Error.QueueOverflow     = 0;
     } else if (isdigit(*StrBuffPTR)){
         ErrorNum = *StrBuffPTR - '0';
         switch(ErrorNum){
@@ -387,6 +387,10 @@ void ErrorMsg(){
                 sprintf(MsgBuffer,"\r\nError %d (InvalidGPIOAction): %u\r\n-", ErrorNum, global.Error.InvalidGPIOAction);
                 break;
             }
+            case 5: {
+                sprintf(MsgBuffer,  "\r\nError %d (Queue Overflow): %u\r\n-", ErrorNum, global.Error.QueueOverflow);
+                break;
+            }
             default: {
                 sprintf(MsgBuffer,"\r\nError: Invalid error number\r\n");
                 break;
@@ -406,6 +410,8 @@ void ErrorMsg(){
     sprintf(MsgBuffer,"(3) Invalid GPIO Pin   : %hhu\r\n",global.Error.InvalidGPIOPin);
     UART_Write_Protected(MsgBuffer);
     sprintf(MsgBuffer,"(4) Invalid GPIO Action: %hhu\r\n",global.Error.InvalidGPIOAction);
+    UART_Write_Protected(MsgBuffer);
+    sprintf(MsgBuffer,"(5) Queue Overflow     : %hhu\r\n",global.Error.QueueOverflow);
     UART_Write_Protected(MsgBuffer);
     strcpy (MsgBuffer,MsgBreaker);
     UART_Write_Protected(MsgBuffer);
