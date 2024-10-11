@@ -49,6 +49,8 @@ void TickerParser();
 
 void RegParse();
 
+void ScriptsParse();
+
 void InvalidMsg();
 
 /*
@@ -90,5 +92,7 @@ void HelpCallbackMsg();
 void HelpTickerMsg();
 
 void HelpRegMsg();
+
+void HelpScriptMsg();
 
 #endif /* COMMANDTERMINAL_H_ */

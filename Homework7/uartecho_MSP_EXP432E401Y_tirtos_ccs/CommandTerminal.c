@@ -128,8 +128,10 @@ void HelpParse() {
             HelpCallbackMsg();
         } else if (MatchSubString(SubStrPtr,   "-ticker") || MatchSubString(SubStrPtr,"ticker")){
             HelpTickerMsg();
-        } else if (MatchSubString(SubStrPtr,   "-reg") || MatchSubString(SubStrPtr,"reg")){
+        } else if (MatchSubString(SubStrPtr,      "-reg") || MatchSubString(SubStrPtr,"reg")){
             HelpRegMsg();
+        } else if (MatchSubString(SubStrPtr,   "-script") || MatchSubString(SubStrPtr,"script")){
+            HelpScriptMsg();
         } else {
             InvalidMsg();
         }
@@ -181,6 +183,10 @@ void HelpParse() {
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "              : Lists and configures 32 available registers \r\n");
         UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "  Command     : -script \r\n");
+        UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "              : Lists and configures 64 available scripts \r\n");
+        UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  **Note**    : Type -help <command> for more information\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, MsgBreaker);
@@ -217,7 +223,6 @@ void PrintMsg(){
     index = global.MsgQueue.Read;
 
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
-    strcpy(MsgBuffer,                          "\n\r");
     strcat(MsgBuffer,NextSubString(global.MsgQueue.MsgQueue[index],true));
     strcat(MsgBuffer,                          "\n\r");
     UART_Write_Protected(MsgBuffer);
@@ -705,7 +710,7 @@ void RegParse(){
     if (!StrBuffPTR){
         UART_Write_Protected(MsgBreaker);
         for(i = 0; i < NUM_REGS/2; i++){
-            sprintf(MsgBuffer, "Reg %2.d: %9.d | (0x%08xh)  |  Reg %2.d: %9.d | (0x%08xh)\r\n", i, global.Regs.Reg[i],global.Regs.Reg[i],i+16,global.Regs.Reg[i+16],global.Regs.Reg[i+16]);
+            sprintf(MsgBuffer, "Reg %2d: %9.d | (0x%08x)  |  Reg %2.d: %9.d | (0x%08x)\r\n", i, global.Regs.Reg[i],global.Regs.Reg[i],i+16,global.Regs.Reg[i+16],global.Regs.Reg[i+16]);
             UART_Write_Protected(MsgBuffer);
         }
         UART_Write_Protected(MsgBreaker);
@@ -964,11 +969,78 @@ void RegParse(){
         }
     }
     Print:
-    sprintf(MsgBuffer, "\r\nReg %2d: %9d | (0x%08xh)\r\n", DestNum, global.Regs.Reg[DestNum],global.Regs.Reg[DestNum]);
+    sprintf(MsgBuffer, "\r\nReg %2d: %9d | (0x%08x)\r\n", DestNum, global.Regs.Reg[DestNum],global.Regs.Reg[DestNum]);
     UART_Write_Protected(MsgBuffer);
 }
 
+void ScriptsParse(){
+    char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+    char *StrBuffPTR;
+    int32_t index = global.MsgQueue.Read;
+    int i;
+    StrBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index], false);
+    if (!StrBuffPTR){
+        UART_Write_Protected(MsgBreaker);
+        for(i = 0; i < NUM_SCRIPTS; i++){
+            sprintf(MsgBuffer, "Script %2d: %s\r\n", i, global.Scripts.Script[i]);
+            UART_Write_Protected(MsgBuffer);
+        }
+        UART_Write_Protected(MsgBreaker);
+        return;
+    }
+    if (MatchSubString(StrBuffPTR, "-clear") || MatchSubString(StrBuffPTR, "clear")){
+        memset(global.Scripts.Script, '\0', sizeof(global.Scripts.Script));
+        return;
+    }
+    /*
+     * x -> Executes Script | r -> Read Script | w -> Write Script
+     */
+    //Script Num
+    int16_t ScriptNum = strtol(StrBuffPTR, NULL, 10);
+    if (ScriptNum >= NUM_SCRIPTS || ScriptNum < 0){
+        UART_Write_Protected("Invalid Script Number\r\n");
+        return;
+    }
+    StrBuffPTR = NextSubString(StrBuffPTR, false);
+    //Script Actions
+    if       (tolower(*StrBuffPTR) == 'x'){
+        char *ScriptPTR = global.Scripts.Script[ScriptNum];
+        while(*ScriptPTR != '\0' && !(ScriptNum>=64)){
+//            if(MatchSubString(ScriptPTR, "-rem")){
+//                continue;
+//            }
+            if(Semaphore_getCount(global.Bios.QueueSemaphore)>=16){
+                sprintf(MsgBuffer,"-script %d x",ScriptNum);
+                AddPayload(MsgBuffer);
+                return;
+            }
+            strcpy(MsgBuffer, ScriptPTR);
+            AddPayload(MsgBuffer);
+            ScriptNum++;
+            ScriptPTR = global.Scripts.Script[ScriptNum];
+        }
+        return;
+    } else if(tolower(*StrBuffPTR) == 'r'){
 
+        sprintf(MsgBuffer, "Script %2d: %s\r\n", ScriptNum, global.Scripts.Script[ScriptNum]);
+        UART_Write_Protected(MsgBuffer);
+        return;
+
+    } else if(tolower(*StrBuffPTR) == 'w'){
+
+        StrBuffPTR = NextSubString(StrBuffPTR, false);
+        strcpy(global.Scripts.Script[ScriptNum],StrBuffPTR);
+        //Script Print
+        sprintf(MsgBuffer, "Script %2d: %s\r\n", ScriptNum, global.Scripts.Script[ScriptNum]);
+        UART_Write_Protected(MsgBuffer);
+        return;
+
+    } else {
+        UART_Write_Protected("\r\n Invalid Script Action \r\n");
+        return;
+    }
+
+}
 
 void InvalidMsg(){
     global.Error.InvalidCMD++;
@@ -1056,9 +1128,13 @@ void MsgParser() {
     } else if (MatchSubString(payload, "-callback")) {
           CallbackParse();
     } else if (MatchSubString(payload, "-ticker"  )) {
-           TickerParse();
+          TickerParse();
     } else if (MatchSubString(payload, "-reg"     )) {
-           RegParse();
+          RegParse();
+    } else if (MatchSubString(payload, "-script"  )) {
+          ScriptsParse();
+    } else if (MatchSubString(payload, "-rem"     )) {
+
     } else if (MatchSubString(payload, "\r\n"     )) {
           strcpy(MsgBuffer, "\r\n");
           UART_Write_Protected(MsgBuffer);
@@ -1339,6 +1415,34 @@ void HelpRegMsg(){
     strcpy(MsgBuffer, "              : * -> MUL  |  /  -> DIV\r\n");
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer, "              : % -> Remainder\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Location    : CommandTerminal.c\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+}
+
+void HelpScriptMsg(){
+    char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Command     : -script\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Description : Lists and configures scripts (0-63)\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Secondary arg -clear will reset all script configurations\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Ticker Configuration:\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : -script <script num> <operation> <payload>\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : Operation Modes:\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : x -> Executes Script:\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : r -> Reads Script:\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "              : w -> Write Script:\r\n");
     UART_Write_Protected(MsgBuffer);
     strcpy(MsgBuffer, "  Location    : CommandTerminal.c\r\n");
     UART_Write_Protected(MsgBuffer);

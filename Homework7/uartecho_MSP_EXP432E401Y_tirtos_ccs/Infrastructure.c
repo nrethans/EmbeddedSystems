@@ -36,21 +36,26 @@ void GlobInit(Glob *global) {
     global->MsgQueue.Read             = 0;
     memset(global->MsgQueue.MsgQueue, '\0',sizeof(global->MsgQueue.MsgQueue));
 
-    global->Callbacks.CallbackRep[0]  = 0;
-    global->Callbacks.CallbackRep[1]  = 0;
-    global->Callbacks.CallbackRep[2]  = 0;
-    global->Callbacks.CallbackRep[3]  = 0;
+//    global->Callbacks.CallbackRep[0]  = 0;
+//    global->Callbacks.CallbackRep[1]  = 0;
+//    global->Callbacks.CallbackRep[2]  = 0;
+//    global->Callbacks.CallbackRep[3]  = 0;
+    memset(global->Callbacks.CallbackRep, 0, sizeof(global->Callbacks.CallbackRep));
+//    int i;
+//    for(i = 0; i < NUM_CALLBACKS; i++){
+//        memset(global->Callbacks.Callback[i], '\0', sizeof(global->Callbacks.Callback[i]));
+//    }
+    memset(global->Callbacks.Callback, '\0', sizeof(global->Callbacks.Callback));
 
-    int i;
-    for(i = 0; i < NUM_CALLBACKS; i++){
-        memset(global->Callbacks.Callback[i], '\0', sizeof(global->Callbacks.Callback[i]));
-    }
-    for(i = 0; i < NUM_TICKERS; i++){
-        global->Tickers.TickerDelay[i]       = 0;
-        global->Tickers.TickerPeriod[i]      = 0;
-        global->Tickers.TickerRepetitions[i] = 0;
-        memset(global->Tickers.TickerPayload[i], '\0', sizeof(global->Tickers.TickerPayload[i]));
-    }
+//    for(i = 0; i < NUM_TICKERS; i++){
+//        global->Tickers.TickerDelay[i]       = 0;
+//        global->Tickers.TickerPeriod[i]      = 0;
+//        global->Tickers.TickerRepetitions[i] = 0;
+//    }
+    memset(global->Tickers.TickerDelay, 0, sizeof(global->Tickers.TickerPayload));
+    memset(global->Tickers.TickerPeriod, 0, sizeof(global->Tickers.TickerPeriod));
+    memset(global->Tickers.TickerRepetitions, 0, sizeof(global->Tickers.TickerRepetitions));
+    memset(global->Tickers.TickerPayload, '\0', sizeof(global->Tickers.TickerPayload));
     memset(global->Regs.Reg, 0, sizeof(global->Regs.Reg));
     global->Error.InvalidCMD          = 0;
     global->Error.InputOverflow       = 0;
@@ -74,6 +79,8 @@ void GlobInit(Glob *global) {
     global->Bios.SW1SWI               = swi1;
     global->Bios.SW2SWI               = swi2;
     global->Bios.Timer2SWI            = swi3;
+    memset(global->Scripts.Script, '\0', sizeof(global->Scripts.Script));
+    global->Scripts.ScriptIndex = 0;
 
     global->GlobTail                  = 0x5a5a5a5a;
 }

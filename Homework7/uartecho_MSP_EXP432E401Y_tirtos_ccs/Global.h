@@ -39,15 +39,16 @@
 /*
  * ========== Global Definitions =======
  */
-#define Assignment "6"
-#define Version "6"
-#define SubVersion "1"
+#define Assignment "7"
+#define Version "7"
+#define SubVersion "0"
 #define MsgBufferSize 100
 #define MsgPrintBufferSize 112 //80 for PuTTY width & 32 for \r\n (each is 1 byte)
 #define MsgBreaker "--------------------------------------------------------------------------------\r\n"
 #define MsgQueueLen 32
 #define MsgQueueMsgLen 320
 #define NUM_REGS 32
+#define NUM_SCRIPTS 64
 
 extern Semaphore_Handle semaphore1;
 extern GateSwi_Handle gateSwi0;
@@ -158,6 +159,11 @@ typedef struct Regs{
     int32_t Reg[NUM_REGS];
 } Regs;
 
+typedef struct Scripts{
+    char Script[NUM_SCRIPTS][MsgBufferSize];
+    int32_t ScriptIndex;
+} Scripts;
+
 typedef struct Glob {
     int32_t      GlobHead;
     UART_Handle  uart;
@@ -170,6 +176,7 @@ typedef struct Glob {
     Callbacks    Callbacks;
     Tickers      Tickers;
     Regs         Regs;
+    Scripts      Scripts;
     int32_t      GlobTail;
 } Glob;
 
@@ -267,6 +274,8 @@ void TickerParser();
 
 void RegParse();
 
+void ScriptsParse();
+
 void InvalidMsg();
 
 /*
@@ -294,6 +303,8 @@ void HelpCallbackMsg();
 void HelpTickerMsg();
 
 void HelpRegMsg();
+
+void HelpScriptMsg();
 
 /*
  * ========== UART =====================
