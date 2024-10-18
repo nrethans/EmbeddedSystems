@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<ccsVariant value="0:Eclipse-based"/>
+	<ccsVersion value="12.8.0"/>
+	<deviceVariant value="MSP432E401Y"/>
+	<deviceFamily value="MSP432"/>
+	<deviceEndianness value="little"/>
+	<codegenToolVersion value="20.2.7.LTS"/>
+	<isElfFormat value="true"/>
+	<connection value="common/targetdb/connections/TIXDS110_Connection.xml"/>
+	<rts value=""/>
+	<createSlaveProjects value=""/>
+	<ignoreDefaultDeviceSettings value="true"/>
+	<ignoreDefaultCCSSettings value="true"/>
+	<templateProperties value="id=uartecho_MSP_EXP432E401Y_tirtos_ccs.projectspec.uartecho_MSP_EXP432E401Y_tirtos_ccs,buildProfile=release,isHybrid=true"/>
+	<origin value="C:\ti\simplelink_msp432e4_sdk_4_20_00_12\examples\rtos\MSP_EXP432E401Y\drivers\uartecho\tirtos\ccs\uartecho_MSP_EXP432E401Y_tirtos_ccs.projectspec"/>
+	<filesToOpen value=""/>
+	<isTargetManual value="false"/>
+</projectOptions>
