@@ -168,8 +168,8 @@ typedef struct Scripts{
 
 typedef struct LUTCtrl{
 //    uint16_t  *sinlut14;
-    float     lutDelta;
-    uint32_t  lutPosition;
+    double     lutDelta;
+    double  lutPosition;
 } LUTCtrl;
 
 typedef struct Glob {
@@ -293,7 +293,7 @@ void ScriptsParse(char *ch);
 
 void IfParse();
 
-void SineParse();
+void SineParse(char *ch);
 
 void InvalidMsg();
 

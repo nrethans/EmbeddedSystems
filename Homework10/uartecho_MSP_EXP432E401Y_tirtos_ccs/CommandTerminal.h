@@ -57,7 +57,7 @@ void IfParse();
 
 void UARTParse();
 
-void SineParse();
+void SineParse(char *ch);
 
 void InvalidMsg();
 

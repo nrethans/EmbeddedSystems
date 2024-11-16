@@ -85,6 +85,15 @@ void GlobInit(Glob *global) {
     strcpy(global->Scripts.Script[42],"-ticker 2 200 1 1 -gpio 2 t");
     strcpy(global->Scripts.Script[43],"-ticker 3 250 1 1 -gpio 3 t");
 
+    strcpy(global->Scripts.Script[45],"-ticker 0 0 100 -1 -sine 131");
+    strcpy(global->Scripts.Script[46],"-ticker 0 150 1000 -1 -sine 294");
+    strcpy(global->Scripts.Script[47],"-ticker 0 300 1000 -1 -sine 311");
+    strcpy(global->Scripts.Script[48],"-ticker 0 450 1000 -1 -sine 349");
+    strcpy(global->Scripts.Script[49],"-ticker 0 600 1000 -1 -sine 392");
+    strcpy(global->Scripts.Script[50],"-ticker 0 750 1000 -1 -sine 440");
+    strcpy(global->Scripts.Script[51],"-ticker 0 900 1000 -1 -sine 466");
+
+
     global->LUTCtrl.lutDelta          = 0;
     global->LUTCtrl.lutPosition       = 0;
 
@@ -195,7 +204,12 @@ void Timer_Init(){
  */
 
 void Timer0CallBack(){
-    Swi_post(swi0);
+    if(MatchSubString(global.Callbacks.Callback[0],"-sine")){
+        SineParse(global.Callbacks.Callback[0]);
+    }
+    else{
+        Swi_post(swi0);
+    }
 }
 
 void Timer1CallBack(){

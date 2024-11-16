@@ -1248,33 +1248,38 @@ void IfParse(){
     }
 }
 
-void SineParse(){
+void SineParse(char *ch){
     SPI_Transaction spiTransaction;
     bool            transferOK;
     char            MsgBuffer[MsgPrintBufferSize] = {'\0'};
     char            *StrBuffPTR;
-    uint16_t        frequency;
+    double          frequency;
     uint16_t        lowerIndex;
     uint16_t        upperIndex;
-    double           lowerWeight;
-    double           upperWeight;
-    double           answer;
-    uint16_t           outval;
+    double          lowerWeight;
+    double          upperWeight;
+    double          answer;
+    uint16_t        outval;
 
     int32_t index = global.MsgQueue.Read;
-    StrBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index], false);
+
+    if (ch != NULL){
+        StrBuffPTR = NextSubString(ch,false);
+    } else {
+        StrBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index],false);
+    }
 
     if(global.Timer1.Period != 125){
         TimerParse("-timer 125");
     }
-    if(StrBuffPTR && StrBuffPTR[0] != 0){
+    if(StrBuffPTR && StrBuffPTR[0] != 0 && global.Timer1.Period > 0){
         if(isdigit(*StrBuffPTR) == 0){
             sprintf(MsgBuffer,"Message %s Missing Required Value",StrBuffPTR);
             UART_Write_Protected(MsgBuffer);
             return;
         }
         frequency = atoi(StrBuffPTR);
-        global.LUTCtrl.lutDelta = (double) frequency * (double) LUT_SIZE * (double) global.Timer1.Period/1000000;
+        global.LUTCtrl.lutDelta = (double) frequency * (double) LUT_SIZE * (double) global.Timer1.Period/1000000.0;
     }
 
     if(global.LUTCtrl.lutDelta >= LUT_SIZE/2){
@@ -1287,6 +1292,7 @@ void SineParse(){
         global.LUTCtrl.lutDelta = 0;
         if(global.Timer1.Period > 0){
             TimerParse("-timer 0");
+            CallbackParse("-callback 0 0");
         }
         AddPayload("-print Timer 0 is off");
         return;
@@ -1302,7 +1308,7 @@ void SineParse(){
     upperIndex = lowerIndex + 1;
     upperWeight = global.LUTCtrl.lutPosition - (double) lowerIndex;
     lowerWeight = 1 - upperWeight;
-    answer = (double) sinlut14[lowerIndex] * lowerWeight + (double) sinlut14[upperIndex] * upperWeight;
+    answer = (double) sinlut14[lowerIndex] * (double) lowerWeight + (double) sinlut14[upperIndex] * (double) upperWeight;
     outval = round(answer);
 
     spiTransaction.count = 1;
@@ -1312,10 +1318,12 @@ void SineParse(){
     if(!transferOK){
         UART_Write_Protected("SPI Transfer ERROR");
     }
+
     global.LUTCtrl.lutPosition += global.LUTCtrl.lutDelta;
     while(global.LUTCtrl.lutPosition >= (double) LUT_SIZE){
         global.LUTCtrl.lutPosition -= (double) LUT_SIZE;
     }
+
 }
 
 void UARTParse(){
@@ -1439,7 +1447,8 @@ void MsgParser() {
     } else if (MatchSubString(payload, "-uart"    )) {
           UARTParse();
     } else if (MatchSubString(payload, "-sine"    )) {
-          SineParse();
+          char *ch = NULL;
+          SineParse(ch);
     } else if (MatchSubString(payload, "\r\n"     )) {
           strcpy(MsgBuffer, "\r\n");
           UART_Write_Protected(MsgBuffer);

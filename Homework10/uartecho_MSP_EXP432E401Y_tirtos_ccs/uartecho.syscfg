@@ -9,28 +9,36 @@
 /**
  * Import the modules used in this configuration.
  */
-const GPIO   = scripting.addModule("/ti/drivers/GPIO");
-const GPIO1  = GPIO.addInstance();
-const GPIO2  = GPIO.addInstance();
-const GPIO3  = GPIO.addInstance();
-const GPIO4  = GPIO.addInstance();
-const GPIO5  = GPIO.addInstance();
-const GPIO6  = GPIO.addInstance();
-const GPIO7  = GPIO.addInstance();
-const GPIO8  = GPIO.addInstance();
-const RTOS   = scripting.addModule("/ti/drivers/RTOS");
-const SPI    = scripting.addModule("/ti/drivers/SPI", {}, false);
-const SPI1   = SPI.addInstance();
-const Timer  = scripting.addModule("/ti/drivers/Timer", {}, false);
-const Timer1 = Timer.addInstance();
-const Timer2 = Timer.addInstance();
-const UART   = scripting.addModule("/ti/drivers/UART");
-const UART1  = UART.addInstance();
-const UART2  = UART.addInstance();
+const ADCBuf  = scripting.addModule("/ti/drivers/ADCBuf", {}, false);
+const ADCBuf1 = ADCBuf.addInstance();
+const GPIO    = scripting.addModule("/ti/drivers/GPIO");
+const GPIO1   = GPIO.addInstance();
+const GPIO2   = GPIO.addInstance();
+const GPIO3   = GPIO.addInstance();
+const GPIO4   = GPIO.addInstance();
+const GPIO5   = GPIO.addInstance();
+const GPIO6   = GPIO.addInstance();
+const GPIO7   = GPIO.addInstance();
+const GPIO8   = GPIO.addInstance();
+const RTOS    = scripting.addModule("/ti/drivers/RTOS");
+const SPI     = scripting.addModule("/ti/drivers/SPI", {}, false);
+const SPI1    = SPI.addInstance();
+const Timer   = scripting.addModule("/ti/drivers/Timer", {}, false);
+const Timer1  = Timer.addInstance();
+const Timer2  = Timer.addInstance();
+const UART    = scripting.addModule("/ti/drivers/UART");
+const UART1   = UART.addInstance();
+const UART2   = UART.addInstance();
 
 /**
  * Write custom configuration values to the imported modules.
  */
+ADCBuf1.$name                              = "CONFIG_ADCBUF_0";
+ADCBuf1.interruptPriority                  = "5";
+ADCBuf1.sequencer0.$name                   = "ti_drivers_adcbuf_ADCBufSeqMSP432E40";
+ADCBuf1.sequencer0.channel0.$name          = "ADCBUF_CHANNEL_0";
+ADCBuf1.sequencer0.channel0.adcPin.$assign = "expansion.38";
+
 GPIO1.$hardware = system.deviceData.board.components.D1;
 GPIO1.$name     = "CONFIG_GPIO_LED0";
 
@@ -98,19 +106,22 @@ iSHA1.$name = "MySHA1";
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-GPIO1.gpioPin.$suggestSolution        = "expansion.87";
-GPIO2.gpioPin.$suggestSolution        = "expansion.85";
-GPIO3.gpioPin.$suggestSolution        = "expansion.64";
-GPIO4.gpioPin.$suggestSolution        = "expansion.66";
-GPIO7.gpioPin.$suggestSolution        = "expansion.82";
-GPIO8.gpioPin.$suggestSolution        = "expansion.84";
-RTOS.timer0.resource.$suggestSolution = "Timer0";
-Timer1.timer.$suggestSolution         = "Timer2";
-Timer2.timer.$suggestSolution         = "Timer1";
-UART1.uart.$suggestSolution           = "UART0";
-UART1.uart.txPin.$suggestSolution     = "expansion.76";
-UART1.uart.rxPin.$suggestSolution     = "expansion.74";
-UART2.uart.txPin.$suggestSolution     = "boosterpack.4";
-UART2.uart.rxPin.$suggestSolution     = "boosterpack.3";
-iSHA1.$suggestSolution                = "SHA0";
-iSHA1.DMA_MD5.$suggestSolution        = "UDMA_CH4";
+ADCBuf1.timer.$suggestSolution                 = "Timer1";
+ADCBuf1.adc.$suggestSolution                   = "ADC0";
+ADCBuf1.sequencer0.dmaChannel.$suggestSolution = "UDMA_CH14";
+GPIO1.gpioPin.$suggestSolution                 = "expansion.87";
+GPIO2.gpioPin.$suggestSolution                 = "expansion.85";
+GPIO3.gpioPin.$suggestSolution                 = "expansion.64";
+GPIO4.gpioPin.$suggestSolution                 = "expansion.66";
+GPIO7.gpioPin.$suggestSolution                 = "expansion.82";
+GPIO8.gpioPin.$suggestSolution                 = "expansion.84";
+RTOS.timer0.resource.$suggestSolution          = "Timer0";
+Timer1.timer.$suggestSolution                  = "Timer3";
+Timer2.timer.$suggestSolution                  = "Timer2";
+UART1.uart.$suggestSolution                    = "UART0";
+UART1.uart.txPin.$suggestSolution              = "expansion.76";
+UART1.uart.rxPin.$suggestSolution              = "expansion.74";
+UART2.uart.txPin.$suggestSolution              = "boosterpack.4";
+UART2.uart.rxPin.$suggestSolution              = "boosterpack.3";
+iSHA1.$suggestSolution                         = "SHA0";
+iSHA1.DMA_MD5.$suggestSolution                 = "UDMA_CH4";
