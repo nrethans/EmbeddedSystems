@@ -9,7 +9,8 @@
 
 
 
-void HelpHelpMsg() {
+void HelpHelpMsg() 
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -23,9 +24,8 @@ void HelpHelpMsg() {
     UART_Write_Protected(MsgBuffer);
 }
 
-
-
-void HelpAboutMsg() {
+void HelpAboutMsg() 
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -41,7 +41,8 @@ void HelpAboutMsg() {
 
 
 
-void HelpPrintMsg() {
+void HelpPrintMsg() 
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -57,7 +58,8 @@ void HelpPrintMsg() {
 
 
 
-void HelpClearMsg() {
+void HelpClearMsg() 
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -73,7 +75,8 @@ void HelpClearMsg() {
 
 
 
-void HelpMemrMsg() {
+void HelpMemrMsg() 
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -91,7 +94,8 @@ void HelpMemrMsg() {
 
 
 
-void HelpGPIOMsg() {
+void HelpGPIOMsg() 
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -129,7 +133,8 @@ void HelpGPIOMsg() {
 
 
 
-void HelpErrorMsg() {
+void HelpErrorMsg() 
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -167,7 +172,8 @@ void HelpErrorMsg() {
 
 
 
-void HelpTimerMsg(){
+void HelpTimerMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -189,7 +195,8 @@ void HelpTimerMsg(){
 
 
 
-void HelpCallbackMsg(){
+void HelpCallbackMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -225,7 +232,8 @@ void HelpCallbackMsg(){
 
 
 
-void HelpTickerMsg(){
+void HelpTickerMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -249,7 +257,8 @@ void HelpTickerMsg(){
 
 
 
-void HelpRegMsg(){
+void HelpRegMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -305,7 +314,8 @@ void HelpRegMsg(){
 
 
 
-void HelpScriptMsg(){
+void HelpScriptMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -335,7 +345,8 @@ void HelpScriptMsg(){
 
 
 
-void HelpIfMsg(){
+void HelpIfMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -369,7 +380,8 @@ void HelpIfMsg(){
 
 
 
-void HelpUARTMsg(){
+void HelpUARTMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -395,7 +407,8 @@ void HelpUARTMsg(){
 
 
 
-void HelpSineMsg(){
+void HelpSineMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
@@ -418,3 +431,29 @@ void HelpSineMsg(){
     strcpy(MsgBuffer, MsgBreaker);
     UART_Write_Protected(MsgBuffer);
 }
+
+void HelpNetUDPMsg()
+{
+    char MsgBuffer[MsgPrintBufferSize] = {'\0'};
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Command     : -netudp\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Description : Transmit UDP message over IP\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "                Requires ethernet connection \r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "                Syntax: -netudp <IP>:<Port> <payload>\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "                **NOTE** \r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "                Port arguement is optional - defaults to 1000.\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "                Receiving messages are automatically added to payload.\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, "  Location    : CommandTerminal.c\r\n");
+    UART_Write_Protected(MsgBuffer);
+    strcpy(MsgBuffer, MsgBreaker);
+    UART_Write_Protected(MsgBuffer);
+}
+

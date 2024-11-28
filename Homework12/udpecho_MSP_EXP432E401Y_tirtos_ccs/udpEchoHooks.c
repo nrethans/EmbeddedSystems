@@ -34,35 +34,31 @@
  *    ======== udpEchoHooks.c ========
  */
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-
-#include <pthread.h>
-
+#include "Global.h"
 #include <ti/ndk/inc/netmain.h>
 
 #include <ti/ndk/slnetif/slnetifndk.h>
 #include <ti/net/slnet.h>
 #include <ti/net/slnetif.h>
 #include <ti/net/slnetutils.h>
-
-//#include <ti/display/Display.h>
 #include <ti/drivers/emac/EMACMSP432E4.h>
+
 
 #define UDPPORT 1000
 
-#define UDPHANDLERSTACK 4096
+#define UDPHANDLERSTACK 5120
 #define IFPRI  4   /* Ethernet interface priority */
 
 /* Prototypes */
-//extern Display_Handle display;
-extern void *echoFxn(void *arg0);
+
+extern void *ListenFxn(void *arg0);
+extern void *TransmitFxn(void *arg0);
 
 /*
  *  ======== netIPAddrHook ========
  *  user defined network IP address hook
  */
+
 void netIPAddrHook(uint32_t IPAddr, unsigned int IfIdx, unsigned int fAdd)
 {
     pthread_t          thread;
@@ -74,26 +70,29 @@ void netIPAddrHook(uint32_t IPAddr, unsigned int IfIdx, unsigned int fAdd)
     static uint16_t    arg0 = UDPPORT;
     static bool        createTask = true;
     int32_t            status = 0;
+    char               MsgBuffer[MsgPrintBufferSize] = {'\0'};
 
     if (fAdd) {
-//        Display_printf(display, 0, 0, "Network Added: ");
+        sprintf(MsgBuffer, "-print Network Added: ");
+        AddPayload(MsgBuffer);
     }
     else {
-//        Display_printf(display, 0, 0, "Network Removed: ");
+        sprintf(MsgBuffer, "-print Network Removed: ");
+        AddPayload(MsgBuffer);
     }
 
     /* print the IP address that was added/removed */
     hostByteAddr = NDK_ntohl(IPAddr);
-//    Display_printf(display, 0, 0, "If-%d:%d.%d.%d.%d\n", IfIdx,
-//            (uint8_t)(hostByteAddr>>24)&0xFF, (uint8_t)(hostByteAddr>>16)&0xFF,
-//            (uint8_t)(hostByteAddr>>8)&0xFF, (uint8_t)hostByteAddr&0xFF);
-
+    sprintf(MsgBuffer,"-print If-%d:%d.%d.%d.%d\n", IfIdx,
+            (uint8_t)(hostByteAddr>>24)&0xFF, (uint8_t)(hostByteAddr>>16)&0xFF,
+            (uint8_t)(hostByteAddr>>8)&0xFF, (uint8_t)hostByteAddr&0xFF);
+    AddPayload(MsgBuffer);
     /* initialize SlNet interface(s) */
     status = ti_net_SlNet_initConfig();
     if (status < 0)
     {
-//        Display_printf(display, 0, 0, "Failed to initialize SlNet interface(s)"
-//                       "- status (%d)\n", status);
+        sprintf(MsgBuffer, "-print Failed to initialize SlNet interface(s).");
+        AddPayload(MsgBuffer);
         while (1);
     }
 
@@ -103,15 +102,17 @@ void netIPAddrHook(uint32_t IPAddr, unsigned int IfIdx, unsigned int fAdd)
          *  arg0 will be the port that this task listens to.
          */
 
-        /* Set priority and stack size attributes */
+        /*
+         * Create Listening Thread
+         */
         pthread_attr_init(&attrs);
         priParam.sched_priority = 1;
 
         detachState = PTHREAD_CREATE_DETACHED;
         retc = pthread_attr_setdetachstate(&attrs, detachState);
         if (retc != 0) {
-//            Display_printf(display, 0, 0,
-//                    "netIPAddrHook: pthread_attr_setdetachstate() failed\n");
+            sprintf(MsgBuffer, "netIPAddrHook: pthread_attr_setdetachstate() failed");
+            AddPayload(MsgBuffer);
             while (1);
         }
 
@@ -119,18 +120,24 @@ void netIPAddrHook(uint32_t IPAddr, unsigned int IfIdx, unsigned int fAdd)
 
         retc |= pthread_attr_setstacksize(&attrs, UDPHANDLERSTACK);
         if (retc != 0) {
-//            Display_printf(display, 0, 0,
-//                    "netIPAddrHook: pthread_attr_setstacksize() failed\n");
+            sprintf(MsgBuffer, "netIPAddrHook: pthread_attr_setstacksize() failed");
+            AddPayload(MsgBuffer);
             while (1);
         }
 
-        retc = pthread_create(&thread, &attrs, echoFxn, (void *)&arg0);
+        retc = pthread_create(&thread, &attrs, ListenFxn/*Keep Listening*/, (void *)&arg0);
         if (retc != 0) {
-//            Display_printf(display, 0, 0,
-//                    "netIPAddrHook: pthread_create() failed\n");
+            sprintf(MsgBuffer, "netIPAddrHook: pthread_create() failed");
+            AddPayload(MsgBuffer);
             while (1);
         }
 
+        retc = pthread_create(&thread, &attrs, TransmitFxn/*Change to Transmit*/, (void *)&arg0);
+        if (retc != 0) {
+            sprintf(MsgBuffer, "netIPAddrHook: pthread_create() failed");
+            AddPayload(MsgBuffer);
+            while (1);
+        }
         createTask = false;
     }
 }
@@ -145,17 +152,19 @@ void serviceReport(uint32_t item, uint32_t status, uint32_t report, void *h)
     static char *reportStr[] = {"", "Running", "Updated", "Complete", "Fault"};
     static char *statusStr[] =
         {"Disabled", "Waiting", "IPTerm", "Failed","Enabled"};
+    char               MsgBuffer[MsgPrintBufferSize] = {'\0'};
 
-//    Display_printf(display, 0, 0, "Service Status: %-9s: %-9s: %-9s: %03d\n",
-//            taskName[item - 1], statusStr[status], reportStr[report / 256],
-//            report & 0xFF);
+    sprintf(MsgBuffer, "Service Status: %-9s: %-9s: %-9s: %03d\n",
+            taskName[item - 1], statusStr[status], reportStr[report / 256],
+            report & 0xFF);
+    AddPayload(MsgBuffer);
 
     /* report common system issues */
     if ((item == CFGITEM_SERVICE_DHCPCLIENT) &&
             (status == CIS_SRV_STATUS_ENABLED) &&
             (report & NETTOOLS_STAT_FAULT)) {
-//        Display_printf(display, 0, 0,
-//                "DHCP Client initialization failed; check your network.\n");
+        sprintf(MsgBuffer, "DHCP Client initialization failed; check your network.\n");
+        AddPayload(MsgBuffer);
 
         while (1);
     }

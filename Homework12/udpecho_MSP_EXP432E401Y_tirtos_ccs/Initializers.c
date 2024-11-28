@@ -9,7 +9,8 @@
 
 
 
-void GlobInit(Glob *global) {
+void GlobInit(Glob *global) 
+{
     global->GlobHead                  = 0x5a5a5a5a;
 
     global->MsgInput.index            = 0;
@@ -41,8 +42,10 @@ void GlobInit(Glob *global) {
 
     global->Bios.QueueSemaphore       = semaphore1;
     global->Bios.ADCSemaphore         = semaphore2;
+    global->Bios.NetSemaphore         = semaphore3;
     global->Bios.PayloadGate          = gateSwi0;
     global->Bios.CallbackGate         = gateSwi1;
+    global->Bios.NetworkGate          = gateSwi2;
     global->Bios.InputTask            = task0;
     global->Bios.PayloadTask          = task1;
     global->Bios.AAATask              = task2;
@@ -90,12 +93,16 @@ void GlobInit(Glob *global) {
     global->TXBufCtrl[0].TX_delay = 8;
     global->TXBufCtrl[1].TX_delay = 8;
 
+    global->NetOutQ.payloadReading= 0;
+    global->NetOutQ.payloadWriting= 0;
+
     global->GlobTail                  = 0x5a5a5a5a;
 }
 
 
 
-void ADCBuf_Init(){
+void ADCBuf_Init()
+{
     ADCBuf_init();
 
     ADCBuf_Params_init(&global.ADCBuf.params);
@@ -105,9 +112,8 @@ void ADCBuf_Init(){
     global.ADCBuf.params.callbackFxn = ADCBufCallback;
     global.ADCBuf.params.samplingFrequency = 8000;
     global.ADCBuf.Handle = ADCBuf_open(CONFIG_ADCBUF_0, &global.ADCBuf.params);
-    if(global.ADCBuf.Handle == NULL){
+    if(global.ADCBuf.Handle == NULL)
         while(1);
-    }
 
     global.ADCBufCtrl.conversion.adcChannel = ADCBUF_CHANNEL_0;
     global.ADCBufCtrl.conversion.arg = NULL;
@@ -118,44 +124,35 @@ void ADCBuf_Init(){
 
 
 
-void SPI_Init(){
+void SPI_Init()
+{
     SPI_init();
     SPI_Handle      spi;
     SPI_Params      spiParams;
     SPI_Params_init(&spiParams);
     spiParams.dataSize = 16;
     spiParams.frameFormat = SPI_POL0_PHA1;
-
     spi = SPI_open(CONFIG_SPI_0, &spiParams);
-
-    if (spi == NULL) {
+    if (spi == NULL)
         while (1);  // SPI_open() failed
-    }
-
     global.SPI_3 = spi;
 }
 
 
 
-void UART_Init(){
-
+void UART_Init()
+{
     UART_Params uartParams;
     UART_init();
-
     //Main UART
     UART_Params_init(&uartParams);
     uartParams.writeDataMode = UART_DATA_BINARY;
     uartParams.readDataMode = UART_DATA_BINARY;
     uartParams.readReturnMode = UART_RETURN_FULL;
     uartParams.baudRate = 115200;
-
     global.uart = UART_open(CONFIG_UART_0, &uartParams);
-
-    if (global.uart == NULL) {
-        /* UART_open() failed */
+    if (global.uart == NULL)
         while (1);
-    }
-
     //UART7
     UART_Params_init(&uartParams);
     uartParams.writeDataMode = UART_DATA_BINARY;
@@ -163,44 +160,32 @@ void UART_Init(){
     uartParams.readReturnMode = UART_RETURN_FULL;
     uartParams.baudRate = 115200;
     uartParams.readEcho = UART_ECHO_OFF;
-
     global.uart7 = UART_open(CONFIG_UART_1, &uartParams);
-
-    if (global.uart7 == NULL) {
-        /* UART_open() failed */
+    if (global.uart7 == NULL)
         while (1);
-    }
 }
 
 
 
 void Timer_Init(){
-
     Timer_init();
     Timer_Handle handle;
     Timer_Params params;
-
     Timer_Params_init(&params);
     params.periodUnits   = Timer_PERIOD_US; //Time specified in microseconds
     params.period        = 1000000;
     params.timerMode     = Timer_CONTINUOUS_CALLBACK;
     params.timerCallback = Timer0CallBack;
     handle = Timer_open(CONFIG_TIMER_0, &params);
-    if(handle == NULL){
-        //Timer_open() failed
+    if(handle == NULL)
         while(1);
-    }
-    if(Timer_start(handle) == Timer_STATUS_ERROR){
-        //Timer_start() failed
+    if(Timer_start(handle) == Timer_STATUS_ERROR)
         while(1);
-    }
     Timer_stop(handle);
     //Timer_stop(handle);
     global.Timer1.Period = params.period;
     global.Timer1.Handle = handle;
-
     //--------------------------------------------------------------------------//
-
     Timer_Handle handle2;
     Timer_Params params2;
     Timer_Params_init(&params2);
@@ -209,14 +194,10 @@ void Timer_Init(){
     params2.timerMode     = Timer_CONTINUOUS_CALLBACK;
     params2.timerCallback = Timer1CallBack;
     handle2 = Timer_open(CONFIG_TIMER_1, &params2);
-    if(handle2 == NULL){
-        //Timer_open() failed
+    if(handle2 == NULL)
         while(1);
-    }
-    if(Timer_start(handle2) == Timer_STATUS_ERROR){
-        //Timer_start() failed
+    if(Timer_start(handle2) == Timer_STATUS_ERROR)
         while(1);
-    }
 //    Timer_stop(handle2);
     global.Timer2.Period = params2.period;
     global.Timer2.Handle = handle2;

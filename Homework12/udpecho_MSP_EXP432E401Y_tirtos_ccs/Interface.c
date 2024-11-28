@@ -10,49 +10,51 @@
 
 
 
-void HelpParse() {
+void HelpParse() 
+{
     char    *StrBuffPTR;
     char    MsgBuffer[MsgPrintBufferSize] = {'\0'};
     int32_t index;
 
     index = global.MsgQueue.Read;
     StrBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index], false);
-    if (StrBuffPTR != NULL){
-        if        (MatchSubString(StrBuffPTR,    "-help" ) || MatchSubString(StrBuffPTR,"help"    )){
-             HelpHelpMsg();
-        } else if (MatchSubString(StrBuffPTR,   "-about" ) || MatchSubString(StrBuffPTR,"about"   )){
+    if (StrBuffPTR != NULL)
+        if (MatchSubString(StrBuffPTR,          "-help") || MatchSubString(StrBuffPTR, "help")    )
+            HelpHelpMsg();
+        else if (MatchSubString(StrBuffPTR,    "-about") || MatchSubString(StrBuffPTR, "about")   )
             HelpAboutMsg();
-        } else if (MatchSubString(StrBuffPTR,   "-print" ) || MatchSubString(StrBuffPTR,"print"   )){
+        else if (MatchSubString(StrBuffPTR,    "-print") || MatchSubString(StrBuffPTR, "print")   )
             HelpPrintMsg();
-        } else if (MatchSubString(StrBuffPTR,   "-clear" ) || MatchSubString(StrBuffPTR,"clear"   )){
+        else if (MatchSubString(StrBuffPTR,    "-clear") || MatchSubString(StrBuffPTR, "clear")   )
             HelpClearMsg();
-        } else if (MatchSubString(StrBuffPTR,    "-memr" ) || MatchSubString(StrBuffPTR,"memr"    )){
+        else if (MatchSubString(StrBuffPTR,     "-memr") || MatchSubString(StrBuffPTR, "memr")    )
             HelpMemrMsg();
-        } else if (MatchSubString(StrBuffPTR,    "-gpio" ) || MatchSubString(StrBuffPTR,"gpio"    )){
+        else if (MatchSubString(StrBuffPTR,     "-gpio") || MatchSubString(StrBuffPTR, "gpio")    )
             HelpGPIOMsg();
-        } else if (MatchSubString(StrBuffPTR,    "-error") || MatchSubString(StrBuffPTR,"error"   )){
+        else if (MatchSubString(StrBuffPTR,    "-error") || MatchSubString(StrBuffPTR, "error")   )
             HelpErrorMsg();
-        } else if (MatchSubString(StrBuffPTR,    "-timer") || MatchSubString(StrBuffPTR,"timer"   )){
+        else if (MatchSubString(StrBuffPTR,    "-timer") || MatchSubString(StrBuffPTR, "timer")   )
             HelpTimerMsg();
-        } else if (MatchSubString(StrBuffPTR, "-callback") || MatchSubString(StrBuffPTR,"callback")){
+        else if (MatchSubString(StrBuffPTR, "-callback") || MatchSubString(StrBuffPTR, "callback"))
             HelpCallbackMsg();
-        } else if (MatchSubString(StrBuffPTR,   "-ticker") || MatchSubString(StrBuffPTR,"ticker"  )){
+        else if (MatchSubString(StrBuffPTR,   "-ticker") || MatchSubString(StrBuffPTR, "ticker")  )
             HelpTickerMsg();
-        } else if (MatchSubString(StrBuffPTR,      "-reg") || MatchSubString(StrBuffPTR,"reg"     )){
+        else if (MatchSubString(StrBuffPTR,      "-reg") || MatchSubString(StrBuffPTR, "reg")     )
             HelpRegMsg();
-        } else if (MatchSubString(StrBuffPTR,   "-script") || MatchSubString(StrBuffPTR,"script"  )){
+        else if (MatchSubString(StrBuffPTR,   "-script") || MatchSubString(StrBuffPTR, "script")  )
             HelpScriptMsg();
-        } else if (MatchSubString(StrBuffPTR,       "-if") || MatchSubString(StrBuffPTR,"if"      )){
+        else if (MatchSubString(StrBuffPTR,       "-if") || MatchSubString(StrBuffPTR, "if")      )
             HelpIfMsg();
-        } else if (MatchSubString(StrBuffPTR,     "-uart") || MatchSubString(StrBuffPTR,"uart"    )){
+        else if (MatchSubString(StrBuffPTR,     "-uart") || MatchSubString(StrBuffPTR, "uart")    )
             HelpUARTMsg();
-        } else if (MatchSubString(StrBuffPTR,     "-sine") || MatchSubString(StrBuffPTR,"sine"    )){
+        else if (MatchSubString(StrBuffPTR,     "-sine") || MatchSubString(StrBuffPTR, "sine")    )
             HelpSineMsg();
-        } else {
+        else if (MatchSubString(StrBuffPTR,   "-netudp") || MatchSubString(StrBuffPTR, "netudp")  )
+            HelpNetUDPMsg();
+        else
             InvalidMsg();
-        }
-
-    } else {
+    else 
+    {
         strcpy(MsgBuffer, MsgBreaker);
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  Command     : -help\r\n");
@@ -123,6 +125,10 @@ void HelpParse() {
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "              : Starts local audio\r\n");
         UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "  Command     : -netudp \r\n");
+        UART_Write_Protected(MsgBuffer);
+        strcpy(MsgBuffer, "              : Transmits UDP messages over IP\r\n");
+        UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, "  **Note**    : Type -help <command> for more information\r\n");
         UART_Write_Protected(MsgBuffer);
         strcpy(MsgBuffer, MsgBreaker);
@@ -132,7 +138,8 @@ void HelpParse() {
 
 
 
-void AboutMsg(){
+void AboutMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
 
     strcpy(MsgBuffer,                  MsgBreaker);
@@ -151,7 +158,8 @@ void AboutMsg(){
 
 
 
-void InvalidMsg(){
+void InvalidMsg()
+{
     char    MsgBuffer[MsgPrintBufferSize] = {'\0'};
     int32_t index;
 
@@ -164,7 +172,8 @@ void InvalidMsg(){
 
 
 
-void ClearMsg(){
+void ClearMsg()
+{
     char MsgBuffer[MsgPrintBufferSize] = {'\0'};
     strcpy(MsgBuffer,"\033c");
     UART_write(global.uart, MsgBuffer,sizeof(MsgBuffer));
@@ -172,7 +181,8 @@ void ClearMsg(){
 
 
 
-void PrintMsg(){
+void PrintMsg()
+{
     int32_t index;
     char    MsgBuffer[MsgPrintBufferSize] = {'\0'};
 
@@ -184,7 +194,8 @@ void PrintMsg(){
 
 
 
-void MemRead(){
+void MemRead()
+{
     char    MsgBuffer[MsgPrintBufferSize] = {'\0'};
     char    *addressPTR;
     char    *MsgBuffPTR;
@@ -193,43 +204,41 @@ void MemRead(){
     int32_t index;
 
     index = global.MsgQueue.Read;
-    MsgBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index],false);
-    if(MsgBuffPTR == NULL){
+    MsgBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index], false);
+    if(MsgBuffPTR == NULL)
         address = 0;
-    } else {
+    else
         address = strtoul(MsgBuffPTR, &addressPTR, 16);
-    }
     address = address & 0xFFFFFFF0;
-    if((address >= 0x00100000 && address < 20000000) || (address >= 0x20040000)){
+    if((address >= 0x00100000 && address < 20000000) || (address >= 0x20040000))
         goto BadAddress;
-    }
 
     strcpy(MsgBuffer, "\r\n Memory Read: \r\n");
     UART_Write_Protected(MsgBuffer);
-    sprintf(MsgBuffer, "| %#010x | %#010x | %#010x | %#010x |\r\n",address+0xC,address+0x8,address+0x4,address+0x0);
+    sprintf(MsgBuffer, "| %#010x | %#010x | %#010x | %#010x |\r\n", address + 0xC, address + 0x8, address + 0x4, address + 0x0);
     UART_Write_Protected(MsgBuffer);
-    value = *(int32_t*) (address + 0xC);
-    sprintf(MsgBuffer,"| %#010x | ",value);
-    UART_Write_Protected(MsgBuffer);
-
-    value = *(int32_t*) (address + 0x8);
-    sprintf(MsgBuffer,"%#010x | ",value);
+    value = *(int32_t*)(address + 0xC);
+    sprintf(MsgBuffer, "| %#010x | ", value);
     UART_Write_Protected(MsgBuffer);
 
-    value = *(int32_t*) (address + 0x4);
-    sprintf(MsgBuffer,"%#010x | ",value);
+    value = *(int32_t*)(address + 0x8);
+    sprintf(MsgBuffer, "%#010x | ", value);
     UART_Write_Protected(MsgBuffer);
 
-    value = *(int32_t*) (address + 0x0);
-    sprintf(MsgBuffer,"%#010x | \r\n",value);
+    value = *(int32_t*)(address + 0x4);
+    sprintf(MsgBuffer, "%#010x | ", value);
+    UART_Write_Protected(MsgBuffer);
+
+    value = *(int32_t*)(address + 0x0);
+    sprintf(MsgBuffer, "%#010x | \r\n", value);
     UART_Write_Protected(MsgBuffer);
 
     return;
-    BadAddress:
+BadAddress:
     global.Error.InvalidAddress++;
-    strcpy(MsgBuffer,"\r\nInvalid address, cannot be:");
+    strcpy(MsgBuffer, "\r\nInvalid address, cannot be:");
     UART_Write_Protected(MsgBuffer);
-    strcpy(MsgBuffer,"\r\n0x00100000 <= Address < 0x20000000 or Address >= 0x20040000\r\n");
+    strcpy(MsgBuffer, "\r\n0x00100000 <= Address < 0x20000000 or Address >= 0x20040000\r\n");
     UART_Write_Protected(MsgBuffer);
 }
 
@@ -1411,6 +1420,15 @@ void VoiceParse(char *ch){
 
 
 void AudioParse(){
+    /**
+     * Parses audio data and sends it via SPI.
+     *
+     * This function iterates through the global TX buffer control structure, 
+     * processes the audio data, and sends the processed data via SPI. 
+     * It handles delays, index corrections, and buffer switching between 
+     * Ping and Pong buffers. If the SPI transfer fails, the function enters 
+     * an infinite loop.
+     */
     SPI_Transaction spiTransaction;
     bool transferOK;
     int32_t i;
@@ -1451,7 +1469,19 @@ void AudioParse(){
 
 
 
+
 void StreamParse(char *ch){
+    /**
+     * Parses the input stream and controls the ADC buffer conversion state.
+     *
+     * This function processes the input character stream to determine the desired
+     * ADC buffer conversion state (0, 1, or 2). It updates the global ADC buffer
+     * control structure based on the parsed intent and manages the state transitions
+     * including starting, stopping, and configuring the ADC buffer and related components.
+     *
+     * param ch Pointer to the input character stream. If NULL, the function uses
+     *          the message from the global message queue.
+     */
     char *StrBuffPTR;
     uint32_t intent;
     uint32_t i;
@@ -1562,4 +1592,120 @@ void ClearAudioBuffers(){
             global.TXBufCtrl[i].TX_Pong[j] = 0;
         }
     }
+}
+
+
+
+void ParseNetUDP(char *ch, int32_t binaryCount){
+    char *StrBuffPTR;
+    int32_t  payloadnext;
+    uint32_t gateKey;
+    int32_t index = global.MsgQueue.Read;
+
+//    if(global.Discoveries[0].IP_address == 0){
+//        UART_Write_Protected("Network Service is not running\r\n");
+//        return;
+//    }
+
+    StrBuffPTR = NextSubString(global.MsgQueue.MsgQueue[index], true);
+    if(!StrBuffPTR)
+        return;
+
+    gateKey = GateSwi_enter(global.Bios.NetworkGate);
+    payloadnext = global.NetOutQ.payloadWriting + 1;
+    if(payloadnext >= NetQueueLen)
+        payloadnext = 0;
+    if(payloadnext == global.NetOutQ.payloadReading){
+        GateSwi_leave(global.Bios.NetworkGate, gateKey);
+        AddPayload("-print Net Queue Error.");
+        return;
+    }
+
+    memcpy(global.NetOutQ.payloads[global.NetOutQ.payloadWriting], StrBuffPTR, strlen(StrBuffPTR) + binaryCount + 1);
+    global.NetOutQ.binaryCount[global.NetOutQ.payloadWriting] = binaryCount;
+    global.NetOutQ.payloadWriting = payloadnext;
+    GateSwi_leave(global.Bios.NetworkGate, gateKey);
+    Semaphore_post(global.Bios.NetSemaphore);
+
+}
+//int32_t  writeindex = global.MsgQueue.Write;
+//int32_t  nextindex;
+//uint32_t gatekey;
+//
+//ti_sysbios_BIOS_ThreadType tType;
+//tType = BIOS_getThreadType();
+//
+//if(!payload || payload[0] == 0){
+//    return; //Empty payload
+//}
+//
+//if(tType != ti_sysbios_BIOS_ThreadType_Hwi){
+//    gatekey = GateSwi_enter(global.Bios.PayloadGate);
+//}
+//nextindex = writeindex+1;
+//if(nextindex >= MsgQueueLen){
+//    nextindex = 0;
+//}
+//if(nextindex == global.MsgQueue.Read){
+//    GateSwi_leave(global.Bios.PayloadGate, gatekey);
+//    global.Error.QueueOverflow++;
+//} else {
+//    strcpy(global.MsgQueue.MsgQueue[writeindex], payload);
+//    global.MsgQueue.Write = nextindex;
+//}
+//if (tType != ti_sysbios_BIOS_ThreadType_Hwi){
+//    GateSwi_leave(global.Bios.PayloadGate, gatekey);
+//}
+//Semaphore_post(global.Bios.QueueSemaphore);
+
+
+void MsgParser() {
+    char    *payload;
+    char    MsgBuffer[MsgBufferSize];
+    int32_t index;
+    char *ch = NULL;
+    index   = global.MsgQueue.Read;
+    payload = global.MsgQueue.MsgQueue[index];
+
+      if      (MatchSubString(payload, "-help"    ))
+         HelpParse();
+      else if (MatchSubString(payload, "-about"   ))
+          AboutMsg();
+      else if (MatchSubString(payload, "-clear"   ))
+          ClearMsg();
+      else if (MatchSubString(payload, "-print"   ))
+          PrintMsg();
+      else if (MatchSubString(payload, "-memr"    ))
+           MemRead();
+      else if (MatchSubString(payload, "-gpio"    ))
+          GPIOParse(ch);
+      else if (MatchSubString(payload, "-error"   ))
+          ErrorMsg();
+      else if (MatchSubString(payload, "-timer"   ))
+          TimerParse(ch);
+      else if (MatchSubString(payload, "-callback"))
+          CallbackParse(ch);
+      else if (MatchSubString(payload, "-ticker"  ))
+          TickerParse(ch);
+      else if (MatchSubString(payload, "-reg"     ))
+          RegParse(ch);
+      else if (MatchSubString(payload, "-script"  ))
+          ScriptsParse(ch);
+      else if (MatchSubString(payload, "-rem"     ))
+          PrintMsg();
+      else if (MatchSubString(payload, "-if"      ))
+          IfParse();
+      else if (MatchSubString(payload, "-uart"    ))
+          UARTParse();
+      else if (MatchSubString(payload, "-sine"    ))
+          SineParse(ch);
+      else if (MatchSubString(payload, "-stream"  ))
+        StreamParse(ch);
+      else if (MatchSubString(payload, "-netudp"  ))
+        ParseNetUDP(ch,0);
+      else if (MatchSubString(payload, "\r\n"     )) {
+          strcpy(MsgBuffer, "\r\n");
+          UART_Write_Protected(MsgBuffer);
+    } else
+          InvalidMsg();
 }

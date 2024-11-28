@@ -35,11 +35,6 @@
  *    Contains BSD sockets code.
  */
 
-#include <string.h>
-#include <stdint.h>
-#include <stdio.h>
-
-#include <pthread.h>
 /* BSD support */
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -49,26 +44,107 @@
 
 #include <ti/net/slnetutils.h>
 
-//#include <ti/display/Display.h>
+#include "Global.h"
 
 #define UDPPACKETSIZE 1472
 #define MAXPORTLEN    6
-
-//extern Display_Handle display;
+#define DEFAULT_NET_PORT 1000
 
 extern void fdOpenSession();
 extern void fdCloseSession();
 extern void *TaskSelf();
 
-/*
- *  ======== echoFxn ========
- *  Echoes UDP messages.
- *
- */
-void *echoFxn(void *arg0)
+typedef struct _my_ip_mreq{
+    struct in_addr imr_multiaddr;
+    struct in_addr imr_interface;
+} my_ip_mreq;
+
+char *UDPParse(char *buff, struct sockaddr_in *clientAddr, bool todash){
+    char *StrBufPTR;
+    char *colon;
+    int32_t AddrByte;
+    uint32_t PortWord;
+    char MsgBuff[50];
+
+    StrBufPTR = buff;
+    if(!StrBufPTR) return StrBufPTR;
+//
+    if(MatchSubString(StrBufPTR, "localhost")){
+        clientAddr->sin_addr.s_addr = 0x0100007F;
+        goto coloncheck;
+    }
+//    if(MatchSubString(StrBufPTR, "multicast")){
+//        clientAddr->sin_addr.s_addr = inet_addr(global.Multicast);
+//        goto coloncheck;
+//    }
+    if(MatchSubString(StrBufPTR, "broadcast")){
+        clientAddr->sin_addr.s_addr = inet_addr(0xFFFFFFFF);
+        goto coloncheck;
+    }
+    if(MatchSubString(StrBufPTR, "nobody")){
+        clientAddr->sin_addr.s_addr = 0x00000000;
+        goto coloncheck;
+    }
+    if(isdigit(*StrBufPTR) == 0){
+        sprintf(MsgBuff, "Message '%s' is missing required digits.", StrBufPTR);
+        return NULL;
+    }
+    AddrByte = atoi(StrBufPTR);
+    clientAddr->sin_addr.s_addr = AddrByte;
+
+    StrBufPTR = strchr(StrBufPTR, '.');
+    if(!StrBufPTR) return StrBufPTR;
+    StrBufPTR++;
+    if(*StrBufPTR == 0) return NULL;
+    AddrByte = atoi(StrBufPTR);
+    clientAddr->sin_addr.s_addr |= AddrByte << 8;
+
+    StrBufPTR = strchr(StrBufPTR, '.');
+    if(!StrBufPTR) return StrBufPTR;
+    StrBufPTR++;
+    if(*StrBufPTR == 0) return NULL;
+    AddrByte = atoi(StrBufPTR);
+    clientAddr->sin_addr.s_addr |= AddrByte << 16;
+
+    StrBufPTR = strchr(StrBufPTR, '.');
+    if(!StrBufPTR) return StrBufPTR;
+    StrBufPTR++;
+    if(*StrBufPTR == 0) return NULL;
+    AddrByte = atoi(StrBufPTR);
+    clientAddr->sin_addr.s_addr |= AddrByte << 24;
+
+coloncheck:
+    colon = strchr(StrBufPTR, ':');
+    if(!colon){
+        PortWord = DEFAULT_NET_PORT;
+        StrBufPTR = strchr(StrBufPTR, ' ');
+    }
+    else{
+        StrBufPTR = colon;
+        StrBufPTR++;
+        if(*StrBufPTR == 0) return NULL;
+        if(isdigit(*StrBufPTR) == 0) return NULL;
+        PortWord = atoi(StrBufPTR);
+    }
+    clientAddr->sin_port = (PortWord & 0xFF00) >> 8;
+    clientAddr->sin_port |= (PortWord & 0xFF) << 8;
+
+    clientAddr->sin_family = AF_INET;
+
+    if(StrBufPTR){
+        if(todash)
+            StrBufPTR = strchr(StrBufPTR, '-');
+        else
+            while(isspace(*StrBufPTR))
+                StrBufPTR++;
+    }
+    return StrBufPTR;
+
+}
+
+void *ListenFxn(void *arg0)
 {
     int                bytesRcvd;
-    int                bytesSent;
     int                status;
     int                server = -1;
     fd_set             readSet;
@@ -78,12 +154,15 @@ void *echoFxn(void *arg0)
     socklen_t          addrlen;
     char               buffer[UDPPACKETSIZE];
     char               portNumber[MAXPORTLEN];
+    char               MsgBuff[320];
+    int32_t            optval = 1;
+    my_ip_mreq         mreq;
 
     fdOpenSession(TaskSelf());
 
-//    Display_printf(display, 0, 0, "UDP Echo example started\n");
-
     sprintf(portNumber, "%d", *(uint16_t *)arg0);
+    sprintf(MsgBuff, "-print UDP Recv started : %s", portNumber);
+    AddPayload(MsgBuff);
 
     memset(&hints, 0, sizeof(hints));
     hints.ai_family   = AF_INET;
@@ -93,8 +172,7 @@ void *echoFxn(void *arg0)
     /* Obtain addresses suitable for binding to */
     status = getaddrinfo(NULL, portNumber, &hints, &res);
     if (status != 0) {
-//        Display_printf(display, 0, 0, "Error: getaddrinfo() failed: %s\n",
-//            gai_strerror(status));
+        AddPayload("-print Error: getaddrinfo() failed");
         goto shutdown;
     }
 
@@ -113,15 +191,27 @@ void *echoFxn(void *arg0)
     }
 
     if (server == -1) {
-//        Display_printf(display, 0, 0, "Error: socket not created.\n");
+        AddPayload("-print Error: Socket not created.");
         goto shutdown;
     } else if (p == NULL) {
-//        Display_printf(display, 0, 0, "Error: bind failed.\n");
+        AddPayload("-print Error: bind failed.");
         goto shutdown;
     } else {
         freeaddrinfo(res);
         res = NULL;
     }
+
+    mreq.imr_multiaddr.s_addr = 0x01FFFFEF; //inet_addr(global.Multicast);
+
+    mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+    status = setsockopt(server, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq));
+    if(status)
+        AddPayload("-print Error: socket IP_ADD_MEMBERSHIP to multicast failed.");
+
+    status = setsockopt(server, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+    if(status)
+        AddPayload("-print Error: socket SO_REUSEPORT to multicast failed.");
+
 
     do {
         /*
@@ -134,23 +224,147 @@ void *echoFxn(void *arg0)
 
         /* Wait forever for the reply */
         status = select(server + 1, &readSet, NULL, NULL, NULL);
-        if (status > 0) {
-            if (FD_ISSET(server, &readSet)) {
-                bytesRcvd = recvfrom(server, buffer, UDPPACKETSIZE, 0,
-                        (struct sockaddr *)&clientAddr, &addrlen);
 
-                if (bytesRcvd > 0) {
-                    bytesSent = sendto(server, buffer, bytesRcvd, 0,
-                            (struct sockaddr *)&clientAddr, addrlen);
-                    if (bytesSent < 0 || bytesSent != bytesRcvd) {
-//                        Display_printf(display, 0, 0,
-//                                "Error: sendto failed.\n");
-                        goto shutdown;
+        if (status > 0)
+        {
+            if (FD_ISSET(server, &readSet))
+            {
+                bytesRcvd = recvfrom(server, buffer, UDPPACKETSIZE, 0, (struct sockaddr *)&clientAddr, &addrlen);
+
+                if (bytesRcvd > 0)
+                {
+                    // Pass the received message to AddPayload
+                    buffer[bytesRcvd] = '\0'; // Null-terminate the received message
+
+                    if(MatchSubString("-voice", buffer) == true)
+                        VoiceParse(buffer);
+                    else
+                    {
+                        sprintf(MsgBuff, "UDP %d.%d.%d.%d> ", (uint8_t)(clientAddr.sin_addr.s_addr)      &0xFF, (uint8_t)(clientAddr.sin_addr.s_addr>> 8) &0xFF, (uint8_t)(clientAddr.sin_addr.s_addr>>16)  &0xFF, (uint8_t)(clientAddr.sin_addr.s_addr>>24) &0xFF);
+                        UART_Write_Protected(MsgBuff);
+                        UART_Write_Protected(buffer);
+                        UART_Write_Protected("\r\n");
+                        AddPayload(buffer);
                     }
                 }
             }
         }
     } while (status > 0);
+
+shutdown:
+    if (res) {
+        freeaddrinfo(res);
+    }
+
+    if (server != -1) {
+        close(server);
+    }
+
+    fdCloseSession(TaskSelf());
+
+    return (NULL);
+}
+
+void *TransmitFxn(void *arg0)
+{
+    int                bytesSent;
+    int                status;
+    int                server = -1;
+    fd_set             readSet;
+    fd_set             writeSet;
+    struct addrinfo    hints;
+    struct addrinfo    *res, *p;
+    struct sockaddr_in clientAddr;
+    socklen_t          addrlen;
+//    char               buffer[UDPPACKETSIZE];
+    char               portNumber[MAXPORTLEN];
+//    char               MsgBuff[320];
+    char*              StrBufPTR;
+    int                allow_broadcast = 1;
+    uint32_t           gateKey;
+    uint32_t           payloadnext;
+    int                bytesRequested;
+
+    fdOpenSession(TaskSelf());
+
+    AddPayload("-print UDP Transmit started\n");
+
+//    sprintf(portNumber, "%d", *(uint16_t *)arg0);
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family   = AF_INET;
+    hints.ai_socktype = SOCK_DGRAM;
+    hints.ai_flags    = AI_PASSIVE;
+
+    /* Obtain addresses suitable for binding to */
+    status = getaddrinfo(NULL, portNumber, &hints, &res);
+    if (status != 0) {
+        AddPayload("-print Error: getaddrinfo() failed:");
+        goto shutdown;
+    }
+
+    for (p = res; p != NULL; p = p->ai_next)
+    {
+        server = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+        if (server == -1)
+            continue;
+    }
+
+    if (server == -1)
+    {
+        AddPayload("-print Error: socket not created");
+        goto shutdown;
+    }
+    else //server is valid
+    {
+        freeaddrinfo(res);
+        res = NULL;
+    }
+
+    status  = setsockopt(server, SOL_SOCKET, SO_BROADCAST, (void*) &allow_broadcast, sizeof(allow_broadcast));
+
+    while(1){
+        /*
+         *  readSet and addrlen are value-result arguments, which must be reset
+         *  in between each select() and recvfrom() call
+         */
+
+        FD_ZERO(&readSet);
+        FD_SET(server, &readSet);
+        addrlen = sizeof(clientAddr);
+
+        Semaphore_pend(global.Bios.NetSemaphore, BIOS_WAIT_FOREVER);
+
+        status = select(server + 1, NULL, &writeSet, NULL, NULL);
+
+        if(status <= 0)
+        {
+            AddPayload("-print Error: select(server) failed.");
+            continue;
+        }
+
+        bytesSent = -1;
+        StrBufPTR = UDPParse(global.NetOutQ.payloads[global.NetOutQ.payloadReading], &clientAddr, true);
+
+        if(StrBufPTR){
+            bytesRequested = strlen(StrBufPTR) + 1;
+            bytesRequested += global.NetOutQ.binaryCount[global.NetOutQ.payloadReading];
+
+            bytesSent = sendto(server, StrBufPTR, bytesRequested, 0, (struct sockaddr *)&clientAddr, addrlen);
+        }
+
+        if(!StrBufPTR){
+            AddPayload("-print UDP parse failed");
+        } else if(bytesSent < 0 || bytesSent != bytesRequested){
+            AddPayload("-print Sendto failed");
+        }
+        gateKey = GateSwi_enter(global.Bios.NetworkGate);
+        payloadnext = global.NetOutQ.payloadReading + 1;
+        if(payloadnext >= NetQueueLen)
+            payloadnext = 0;
+        global.NetOutQ.payloadReading = payloadnext;
+        GateSwi_leave(global.Bios.NetworkGate, gateKey);
+    }
 
 shutdown:
     if (res) {

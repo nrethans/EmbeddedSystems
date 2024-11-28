@@ -51,5 +51,8 @@ void StreamParse(char *ch);
 
 void ClearAudioBuffers();
 
+void ParseNetUDP(char *ch, int32_t binaryCount);
+
+void MsgParser();
 
 #endif /* INTERFACE_H_ */

@@ -41,8 +41,8 @@
  * ========== Global Definitions =======
  */
 
-#define Assignment "11"
-#define Version "11"
+#define Assignment "12"
+#define Version "12"
 #define SubVersion "1"
 #define MsgBufferSize 100
 #define MsgPrintBufferSize 112 //80 for PuTTY width & 32 for \r\n (each is 1 byte)
@@ -54,6 +54,8 @@
 #define DATABLOCKSIZE 128
 #define DATADELAY 8
 #define TXBUFCOUNT 2
+#define NetQueueLen 32
+#define NetQueueSize 320
 
 /*
  * ========== Global Externs ============
@@ -61,8 +63,10 @@
 
 extern Semaphore_Handle semaphore1;
 extern Semaphore_Handle semaphore2;
+extern Semaphore_Handle semaphore3;
 extern GateSwi_Handle gateSwi0;
 extern GateSwi_Handle gateSwi1;
+extern GateSwi_Handle gateSwi2;
 extern Task_Handle task0; //UART_Thread
 extern Task_Handle task1; //Payload Thread
 extern Task_Handle task2; //Task AAA
@@ -116,8 +120,10 @@ typedef struct MsgInput{
 typedef struct Bios{
     Semaphore_Handle QueueSemaphore;
     Semaphore_Handle ADCSemaphore;
+    Semaphore_Handle NetSemaphore;
     GateSwi_Handle   PayloadGate;
     GateSwi_Handle   CallbackGate;
+    GateSwi_Handle   NetworkGate;
     Task_Handle      InputTask;
     Task_Handle      PayloadTask;
     Task_Handle      AAATask;
@@ -211,6 +217,16 @@ typedef struct TXBufControl{
     uint16_t TX_Pong[DATABLOCKSIZE];
 } TXBufControl;
 
+typedef struct NetOutQ{
+    int32_t payloadWriting, payloadReading;
+    char    payloads[NetQueueLen][NetQueueSize];
+    int32_t binaryCount[320];
+} NetOutQ;
+
+typedef struct Discoveries{
+    uint32_t IP_address;
+} Discoveries;
+
 typedef struct Glob {
     int32_t       GlobHead;
 
@@ -231,7 +247,9 @@ typedef struct Glob {
     ADCBuf        ADCBuf;
     ADCBufControl ADCBufCtrl;
     TXBufControl  TXBufCtrl[TXBUFCOUNT];
-
+    NetOutQ       NetOutQ;
+    Discoveries   Discoveries[32];
+    uint32_t      Multicast;
     int32_t       GlobTail;
 } Glob;
 
@@ -355,6 +373,8 @@ void StreamParse(char *ch);
 
 void ClearAudioBuffers();
 
+void ParseNetUDP(char *ch, int32_t binaryCount);
+
 /*
  * ========== Help Messages ============
  */
@@ -388,6 +408,8 @@ void HelpIfMsg();
 void HelpUARTMsg();
 
 void HelpSineMsg();
+
+void HelpNetUDPMsg();
 
 #endif
 

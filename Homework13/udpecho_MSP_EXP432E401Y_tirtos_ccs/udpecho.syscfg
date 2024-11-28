@@ -1,0 +1,145 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --board "/ti/boards/MSP_EXP432E401Y" --device "MSP432E" --part "MSP432E401YTPDT" --package "128 Pin QFP|32x32" --product "simplelink_msp432e4_sdk@4.20.00.12"
+ * @v2CliArgs --device "MSP432E401Y" --package "TQFP (PDT)" --board "/ti/boards/MSP_EXP432E401Y" --product "simplelink_msp432e4_sdk@4.20.00.12"
+ * @versions {"tool":"1.21.0+3721"}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const ADCBuf  = scripting.addModule("/ti/drivers/ADCBuf", {}, false);
+const ADCBuf1 = ADCBuf.addInstance();
+const GPIO    = scripting.addModule("/ti/drivers/GPIO", {}, false);
+const GPIO1   = GPIO.addInstance();
+const GPIO2   = GPIO.addInstance();
+const GPIO3   = GPIO.addInstance();
+const GPIO4   = GPIO.addInstance();
+const GPIO5   = GPIO.addInstance();
+const GPIO6   = GPIO.addInstance();
+const GPIO7   = GPIO.addInstance();
+const GPIO8   = GPIO.addInstance();
+const RTOS    = scripting.addModule("/ti/drivers/RTOS");
+const SPI     = scripting.addModule("/ti/drivers/SPI", {}, false);
+const SPI1    = SPI.addInstance();
+const Timer   = scripting.addModule("/ti/drivers/Timer", {}, false);
+const Timer1  = Timer.addInstance();
+const Timer2  = Timer.addInstance();
+const UART    = scripting.addModule("/ti/drivers/UART", {}, false);
+const UART1   = UART.addInstance();
+const UART2   = UART.addInstance();
+const General = scripting.addModule("/ti/ndk/General");
+const NIMU    = scripting.addModule("/ti/ndk/NIMU");
+const NIMU1   = NIMU.addInstance();
+const SlNet   = scripting.addModule("/ti/net/SlNet");
+const SlNet1  = SlNet.addInstance();
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+ADCBuf1.$name                              = "CONFIG_ADCBUF_0";
+ADCBuf1.timer.$assign                      = "Timer3";
+ADCBuf1.sequencer0.$name                   = "ti_drivers_adcbuf_ADCBufSeqMSP432E40";
+ADCBuf1.sequencer0.channel0.$name          = "ADCBUF_CHANNEL_0";
+ADCBuf1.sequencer0.channel0.adcPin.$assign = "expansion.38";
+
+GPIO1.$name     = "CONFIG_GPIO_LED0";
+GPIO1.$hardware = system.deviceData.board.components.D1;
+
+GPIO2.$name     = "CONFIG_GPIO_LED1";
+GPIO2.$hardware = system.deviceData.board.components.D2;
+
+GPIO3.$name     = "CONFIG_GPIO_LED2";
+GPIO3.$hardware = system.deviceData.board.components.D3;
+
+GPIO4.$name     = "CONFIG_GPIO_LED3";
+GPIO4.$hardware = system.deviceData.board.components.D4;
+
+GPIO5.$name              = "CONFIG_GPIO_AUDIO_PWR";
+GPIO5.mode               = "Output";
+GPIO5.initialOutputState = "High";
+GPIO5.gpioPin.$assign    = "boosterpack2.38";
+
+GPIO6.$name              = "CONFIG_GPIO_MIC_PWR";
+GPIO6.mode               = "Output";
+GPIO6.initialOutputState = "High";
+GPIO6.gpioPin.$assign    = "expansion.40";
+
+GPIO7.$name            = "CONFIG_GPIO_SW1";
+GPIO7.$hardware        = system.deviceData.board.components.USR_SW1;
+GPIO7.callbackFunction = "GPIO_SW1_Callback";
+
+GPIO8.$name            = "CONFIG_GPIO_SW2";
+GPIO8.$hardware        = system.deviceData.board.components.USR_SW2;
+GPIO8.callbackFunction = "GPIO_SW2_Callback";
+
+
+SPI1.$name                    = "CONFIG_SPI_0";
+SPI1.mode                     = "Four Pin SS Active Low";
+SPI1.duplex                   = "Master TX Only";
+SPI1.dmaInterruptPriority     = "1";
+SPI1.spi.$assign              = "SSI3";
+SPI1.spi.sclkPin.$assign      = "boosterpack2.7";
+SPI1.spi.mosiPin.$assign      = "boosterpack2.15";
+SPI1.spi.dmaTxChannel.$assign = "UDMA_CH15";
+SPI1.spi.ssPin.$assign        = "boosterpack2.12";
+
+Timer1.$name             = "CONFIG_TIMER_0";
+Timer1.timerType         = "32 Bits";
+Timer1.interruptPriority = "1";
+Timer1.timer.$assign     = "Timer2";
+
+Timer2.$name             = "CONFIG_TIMER_1";
+Timer2.timerType         = "32 Bits";
+Timer2.interruptPriority = "4";
+
+UART1.$name             = "CONFIG_UART_0";
+UART1.$hardware         = system.deviceData.board.components.XDS110UART;
+UART1.interruptPriority = "4";
+
+UART2.$name              = "CONFIG_UART_1";
+UART2.uart.$assign       = "UART7";
+UART2.uart.txPin.$assign = "boosterpack.4";
+UART2.uart.rxPin.$assign = "boosterpack.3";
+
+General.ndkThreadStkSize      = 2048;
+General.lowPriTaskDefStkSize  = 2048;
+General.normPriTaskDefStkSize = 2048;
+General.highPriTaskDefStkSize = 2048;
+General.networkIPAddrHook     = "netIPAddrHook";
+General.tcpTxBufSize          = 1024;
+General.tcpRxBufSize          = 1024;
+General.tcpRxBufLimit         = 2048;
+General.udpRxBufSize          = 2048;
+
+NIMU1.$name              = "CONFIG_NIMU_0";
+NIMU1.dhcpcServReportFxn = "serviceReport";
+NIMU1.staticIPAddr       = "192.168.3.112";
+NIMU1.emac.$name         = "CONFIG_EMAC_0";
+
+SlNet1.$name             = "CONFIG_SLNET_0";
+SlNet1.id                = 2;
+SlNet1.enableSecureSocks = false;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+ADCBuf1.adc.$suggestSolution                   = "ADC0";
+ADCBuf1.sequencer0.dmaChannel.$suggestSolution = "UDMA_CH14";
+GPIO1.gpioPin.$suggestSolution                 = "expansion.87";
+GPIO2.gpioPin.$suggestSolution                 = "expansion.85";
+GPIO3.gpioPin.$suggestSolution                 = "expansion.64";
+GPIO4.gpioPin.$suggestSolution                 = "expansion.66";
+GPIO7.gpioPin.$suggestSolution                 = "expansion.82";
+GPIO8.gpioPin.$suggestSolution                 = "expansion.84";
+RTOS.timer0.resource.$suggestSolution          = "Timer0";
+Timer2.timer.$suggestSolution                  = "Timer1";
+UART1.uart.$suggestSolution                    = "UART0";
+UART1.uart.txPin.$suggestSolution              = "expansion.76";
+UART1.uart.rxPin.$suggestSolution              = "expansion.74";
+NIMU1.emac.emac.$suggestSolution               = "ETHERNET0";
+NIMU1.emac.emac.led0Pin.$suggestSolution       = "boosterpack2.39";
+NIMU1.emac.emac.led1Pin.$suggestSolution       = "boosterpack2.32";

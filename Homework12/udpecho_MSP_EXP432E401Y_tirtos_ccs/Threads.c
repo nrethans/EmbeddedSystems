@@ -107,9 +107,7 @@ void TaskAAA(){
     GPIO_enableInt(CONFIG_GPIO_SW2);
     UART_Init();
     GlobInit(&global);
-//    SPI_init();
     SPI_Init();
-//    ADCBuf_init();
     ADCBuf_Init();
     Timer_Init();
     ClearMsg();
