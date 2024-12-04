@@ -606,10 +606,10 @@ void RegParse(char *ch){
     int32_t DestNum = -1;
     int32_t SourceA = -1;
     int16_t Atype = 0;
-    int32_t Aval = 0;
+    uint32_t Aval = 0;
     int32_t SourceB = -1;
     int16_t Btype = 0;
-    int32_t Bval = 0;
+    uint32_t Bval = 0;
     int32_t OperatorNum = 0;
     int     i;
 
@@ -637,7 +637,9 @@ void RegParse(char *ch){
     if (!StrBuffPTR){
         UART_Write_Protected(MsgBreaker);
         for(i = 0; i < NUM_REGS/2; i++){
-            sprintf(MsgBuffer, "Reg %2d: %9.d | (0x%08x)  |  Reg %2.d: %9.d | (0x%08x)\r\n", i, global.Regs.Reg[i],global.Regs.Reg[i],i+16,global.Regs.Reg[i+16],global.Regs.Reg[i+16]);
+            sprintf(MsgBuffer, "Reg %2d: %9u | (0x%08x)  |  Reg %2d: %9u | (0x%08x)\r\n", 
+                i, global.Regs.Reg[i], global.Regs.Reg[i], 
+                i+16, global.Regs.Reg[i+16], global.Regs.Reg[i+16]);
             UART_Write_Protected(MsgBuffer);
         }
         UART_Write_Protected(MsgBreaker);
@@ -652,7 +654,7 @@ void RegParse(char *ch){
         AddError(REG_ERR, "Invalid Destination Addressing Type");
         return;
     }
-    DestNum = strtol(StrBuffPTR, NULL, 10);
+    DestNum = strtoul(StrBuffPTR, NULL, 10);
     if (DestNum < 0 || DestNum >= NUM_REGS) {
         AddError(REG_ERR, "Invalid Register Num");
         return;
@@ -683,7 +685,7 @@ void RegParse(char *ch){
     switch(Atype){
         case 0:{
             //Register Addressing
-            SourceA = strtol(StrBuffPTR, NULL, 10);
+            SourceA = strtoul(StrBuffPTR, NULL, 10);
             Aval = SourceA;
             if (Aval < 0 || Aval >= NUM_REGS) {
                 AddError(REG_ERR, "Invalid Register Number");
@@ -694,22 +696,21 @@ void RegParse(char *ch){
         }
         case 1:{
             StrBuffPTR++;
-            Aval = strtol(StrBuffPTR, NULL, 10);
+            Aval = strtoul(StrBuffPTR, NULL, 10);
             break;
         }
         case 2:{
-            StrBuffPTR++;
-            StrBuffPTR++;
-            Aval = strtol(StrBuffPTR, NULL, 16);
+            StrBuffPTR += 2;
+            Aval = strtoul(StrBuffPTR, NULL, 16);
             break;
         }
         case 3:{
             StrBuffPTR++;
             if (*StrBuffPTR == '0' && (*(StrBuffPTR + 1) == 'x' || *(StrBuffPTR + 1) == 'X')) {
-                Aval = strtol(StrBuffPTR, NULL, 16);
+                Aval = strtoul(StrBuffPTR, NULL, 16);
             } else if(isdigit(*StrBuffPTR)) {
-                int16_t reg = strtol(StrBuffPTR, NULL, 10);
-                if(reg > NUM_REGS || reg < 0){
+                int16_t reg = strtoul(StrBuffPTR, NULL, 10);
+                if(reg >= NUM_REGS || reg < 0){
                     AddError(REG_ERR, "Invalid Register");
                     return;
                 }
@@ -719,7 +720,7 @@ void RegParse(char *ch){
                 AddError(REG_ERR, "Invalid Memory Address");
                 return;
             }
-            int32_t *DirectAddress = (int32_t *)Aval;
+            uint32_t *DirectAddress = (uint32_t *)Aval;
             Aval = *DirectAddress;
             break;
         }
@@ -752,7 +753,7 @@ void RegParse(char *ch){
     switch(Btype){
         case 0:{
             //Register Addressing
-            SourceB = strtol(StrBuffPTR, NULL, 10);
+            SourceB = strtoul(StrBuffPTR, NULL, 10);
             Bval = SourceB;
             if (Bval < 0 || Bval >= NUM_REGS) {
                 AddError(REG_ERR, "Invalid Register Number");
@@ -763,22 +764,21 @@ void RegParse(char *ch){
         }
         case 1:{
             StrBuffPTR++;
-            Bval = strtol(StrBuffPTR, NULL, 10);
+            Bval = strtoul(StrBuffPTR, NULL, 10);
             break;
         }
         case 2:{
-            StrBuffPTR++;
-            StrBuffPTR++;
-            Bval = strtol(StrBuffPTR, NULL, 16);
+            StrBuffPTR += 2;
+            Bval = strtoul(StrBuffPTR, NULL, 16);
             break;
         }
         case 3:{
             StrBuffPTR++;
             if (*StrBuffPTR == '0' && (*(StrBuffPTR + 1) == 'x' || *(StrBuffPTR + 1) == 'X')) {
-                Bval = strtol(StrBuffPTR, NULL, 16);
+                Bval = strtoul(StrBuffPTR, NULL, 16);
             } else if(isdigit(*StrBuffPTR)) {
-                int16_t reg = strtol(StrBuffPTR, NULL, 10);
-                if(reg > NUM_REGS || reg < 0){
+                int16_t reg = strtoul(StrBuffPTR, NULL, 10);
+                if(reg >= NUM_REGS || reg < 0){
                     AddError(REG_ERR, "Invalid Register");
                     return;
                 }
@@ -789,7 +789,7 @@ void RegParse(char *ch){
                 AddError(REG_ERR, "Invalid Memory Address");
                 return;
             }
-            int32_t *DirectAddress = (int32_t *)Aval;
+            uint32_t *DirectAddress = (uint32_t *)Aval;
             Bval = *DirectAddress;
             break;
         }
@@ -813,7 +813,7 @@ void RegParse(char *ch){
             break;
         }
         case 120: { // "x" Exchange
-            int32_t temp = global.Regs.Reg[DestNum];
+            uint32_t temp = global.Regs.Reg[DestNum];
             global.Regs.Reg[DestNum] = global.Regs.Reg[SourceA];
             global.Regs.Reg[SourceA] = temp;
             break;
@@ -822,7 +822,7 @@ void RegParse(char *ch){
             global.Regs.Reg[DestNum] = Aval + Bval;
             break;
         }
-        case 86: { // "++" Increment
+        case 86: { // "V" (assuming "++")
             global.Regs.Reg[DestNum]++;
             break;
         }
@@ -830,7 +830,7 @@ void RegParse(char *ch){
             global.Regs.Reg[DestNum] = Aval - Bval;
             break;
         }
-        case 90: { // "--" Decrement
+        case 90: { // "Z" (assuming "--")
             global.Regs.Reg[DestNum]--;
             break;
         }
@@ -866,7 +866,7 @@ void RegParse(char *ch){
             global.Regs.Reg[DestNum] = Aval ^ Bval;
             break;
         }
-        case 126: { // "`" NOT (Unary operation)
+        case 126: { // "~" NOT (Unary operation)
             global.Regs.Reg[DestNum] = ~Aval;
             break;
         }
@@ -888,7 +888,7 @@ void RegParse(char *ch){
         }
     }
     Print:
-    sprintf(MsgBuffer, "Reg %2d: %9d | (0x%08x)\r\n", DestNum, global.Regs.Reg[DestNum],global.Regs.Reg[DestNum]);
+    sprintf(MsgBuffer, "Reg %2d: %9u | (0x%08x)\r\n", DestNum, global.Regs.Reg[DestNum], global.Regs.Reg[DestNum]);
     UART_Write_Protected(MsgBuffer);
 }
 

@@ -157,6 +157,7 @@ void *ListenFxn(void *arg0)
     char               MsgBuff[320];
     int32_t            optval = 1;
     my_ip_mreq         mreq;
+    char               *PTR;
 
     fdOpenSession(TaskSelf());
 

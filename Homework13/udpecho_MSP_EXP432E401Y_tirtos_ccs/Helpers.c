@@ -17,7 +17,8 @@ bool MatchSubString(const char *msg1, const char *msg2) {
         msg1++;
         msg2++;
     }
-    return *msg2 == '\0';
+//    return *msg2 == '\0';
+    return true;
 }
 
 

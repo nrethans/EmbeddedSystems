@@ -196,7 +196,7 @@ typedef struct Tickers{
 } Tickers;
 
 typedef struct Regs{
-    int32_t Reg[NUM_REGS];
+    uint32_t Reg[NUM_REGS];
 } Regs;
 
 typedef struct Scripts{

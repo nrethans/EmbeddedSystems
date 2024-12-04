@@ -50,6 +50,8 @@ void GlobInit(Glob *global) {
     memset(global->Tickers.TickerPayload,   '\0',sizeof(global->Tickers.TickerPayload)    );
     //Registers
     memset(global->Regs.Reg,                  0, sizeof(global->Regs.Reg)                 );
+    global->Regs.Reg[3] = 0xc0a8037b;//My Board
+    global->Regs.Reg[4] = 0xc0a8036f; //Nutters Board
     //Scripts
     memset(global->Scripts.Script,          '\0',sizeof(global->Scripts.Script)           );
     global->Scripts.ScriptIndex = 0;

@@ -16,4 +16,5 @@
 	<templateProperties value="id=udpecho_MSP_EXP432E401Y_tirtos_ccs.projectspec.udpecho_MSP_EXP432E401Y_tirtos_ccs,buildProfile=release,isHybrid=true"/>
 	<origin value="C:\ti\simplelink_msp432e4_sdk_4_20_00_12\examples\rtos\MSP_EXP432E401Y\ns\udpecho\tirtos\ccs\udpecho_MSP_EXP432E401Y_tirtos_ccs.projectspec"/>
 	<filesToOpen value=""/>
+	<isTargetManual value="true"/>
 </projectOptions>
