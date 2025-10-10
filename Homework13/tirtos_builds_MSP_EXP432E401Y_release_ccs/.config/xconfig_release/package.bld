@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: 'C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework12/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg',
+        cfgScript: 'C:/Users/Nicop/Desktop/GitHub/EmbeddedSystems/Homework13/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg',
         profile: 'release',
         cfgHome: 'xconfig_release',
 });
@@ -40,8 +40,8 @@ else {
 }
 
 var thisObj = {
-    cfg:        'C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework12/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg',
-    outputPath: 'C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework12/tirtos_builds_MSP_EXP432E401Y_release_ccs/.config/xconfig_release',
+    cfg:        'C:/Users/Nicop/Desktop/GitHub/EmbeddedSystems/Homework13/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg',
+    outputPath: 'C:/Users/Nicop/Desktop/GitHub/EmbeddedSystems/Homework13/tirtos_builds_MSP_EXP432E401Y_release_ccs/.config/xconfig_release',
     exeName:    'release' + suffix,
     exeIntName: 'release' + suffix.replace('.', '_'),
     targ:       targ,

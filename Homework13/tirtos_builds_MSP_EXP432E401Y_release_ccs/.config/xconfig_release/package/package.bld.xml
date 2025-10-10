@@ -7,7 +7,7 @@
         <srcFile name="package/cfg/release_pem4f.c"/>
     </sources>
     <configscripts>
-        <srcFile name="C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework12/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg"/>
+        <srcFile name="C:/Users/Nicop/Desktop/GitHub/EmbeddedSystems/Homework13/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg"/>
     </configscripts>
     <makefiles>
         <srcFile name="package.mak" src="package.bld"/>
@@ -25,7 +25,7 @@
             platform="ti.platforms.tiva:TM4C1294NCPDT:1"
             isa="v7M4"
             suffix="em4f"
-            rootDir="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS"
+            rootDir="C:/ti/ccs1281/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS"
             os="undefined"
             rts="ti.targets.arm.rtsarm">
             <model endian="little"
@@ -44,7 +44,7 @@
         isPartial="false"
         xCfgScript="package/cfg/release_pem4f.cfg"
         xCfgPrefix="package/cfg/release_pem4f"
-        cfgScript="C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework12/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg"
+        cfgScript="C:/Users/Nicop/Desktop/GitHub/EmbeddedSystems/Homework13/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg"
         cfgArgs="null"
         />
     </configurations>
@@ -56,7 +56,7 @@
         profile="release"
         xCfgScript="package/cfg/release_pem4f.cfg"
         xCfgPrefix="package/cfg/release_pem4f"
-        cfgScript="C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework12/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg"
+        cfgScript="C:/Users/Nicop/Desktop/GitHub/EmbeddedSystems/Homework13/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg"
         cfgArgs="null"
         />
     </executables>

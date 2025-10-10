@@ -7,5 +7,5 @@
 #       or equal to the generated config header
 #
 linker.cmd: package/cfg/release_pem4f.xdl
-	$(SED) 's"^\"\(package/cfg/release_pem4fcfg.cmd\)\"$""\"C:/Users/NickRethans/Desktop/EmbeddedSystems/Homework12/tirtos_builds_MSP_EXP432E401Y_release_ccs/.config/xconfig_release/\1\""' package/cfg/release_pem4f.xdl > $@
+	$(SED) 's"^\"\(package/cfg/release_pem4fcfg.cmd\)\"$""\"C:/Users/Nicop/Desktop/GitHub/EmbeddedSystems/Homework13/tirtos_builds_MSP_EXP432E401Y_release_ccs/.config/xconfig_release/\1\""' package/cfg/release_pem4f.xdl > $@
 	-$(SETDATE) -r:max package/cfg/release_pem4f.h compiler.opt compiler.opt.defs
